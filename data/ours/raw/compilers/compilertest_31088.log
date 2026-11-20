@@ -1,0 +1,22 @@
+== 2026-11-20 01:19:53 job 31088.master.local on compute03.local
+build int aesni items=65536 encryption=7.72611 decryption=11.8945 
+build int aesni items=2097152 encryption=7.62625 decryption=11.0016 
+build int aesni_unroll items=65536 encryption=0.711483 decryption=0.920375 
+build int aesni_unroll items=2097152 encryption=0.711845 decryption=0.920238 
+build float aesni_unroll items=65536 encryption=0.225517 decryption=0.371351 
+build float aesni_unroll items=2097152 encryption=0.225489 decryption=0.371318 
+build_gcc9 int aesni items=65536 encryption=7.71743 decryption=12.4536 
+build_gcc9 int aesni items=2097152 encryption=7.71018 decryption=11.2631 
+build_gcc9 int aesni_unroll items=65536 encryption=1.45584 decryption=2.90133 
+build_gcc9 int aesni_unroll items=2097152 encryption=1.45788 decryption=2.90691 
+build_gcc9 float aesni_unroll items=65536 encryption=0.423514 decryption=0.48542 
+build_gcc9 float aesni_unroll items=2097152 encryption=0.424013 decryption=0.485187 
+build_icc int aesni items=65536 encryption=7.58277 decryption=13.0635 
+build_icc int aesni items=2097152 encryption=7.65628 decryption=11.9456 
+build_icc int aesni_unroll items=65536 encryption=0.754581 decryption=1.07579 
+build_icc int aesni_unroll items=2097152 encryption=0.755145 decryption=1.07434 
+build_icc float aesni_unroll items=65536 encryption=0.234603 decryption=0.312399 
+build_icc float aesni_unroll items=2097152 encryption=0.23457 decryption=0.312232 
+== DCHECK with the icpc libhear (pipelined, int sum, 20 ranks on 1 node)
+dcheck_icc rc=0 sizes=23
+== 2026-11-20 01:23:43 done

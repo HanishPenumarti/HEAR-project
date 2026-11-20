@@ -1,0 +1,8 @@
+Buffer size: 8 Bytes
+Dtype: float
+Op: sum
+Func: aesni_unroll
+Avg encryption time: 6.4577e-08 sec.
+Avg encryption throughput: 0.123883 Gbytes/sec.
+Avg decryption time: 3.708e-08 sec.
+Avg decryption throughput: 0.21575 Gbytes/sec.

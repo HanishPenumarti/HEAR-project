@@ -1,0 +1,2 @@
+Rank = 0, world_size = 40, model_shards = 4, data_shards = 10, total_params = 8907568, global_batch_size = 80. 
+CosmoFlow with a hybrid of model and data parallelism runtime for each iteration = 1.256010 s.

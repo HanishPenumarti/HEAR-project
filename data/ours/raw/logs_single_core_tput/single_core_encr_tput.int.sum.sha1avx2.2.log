@@ -1,0 +1,109 @@
+Buffer size: 8 Bytes
+Dtype: int
+Op: sum
+Func: sha1avx2
+Avg encryption time: 3.93585e-07 sec.
+Avg encryption throughput: 0.020326 Gbytes/sec.
+Avg decryption time: 1.95785e-07 sec.
+Avg decryption throughput: 0.0408611 Gbytes/sec.
+*** Error in `/home/<user>/BT2024190/hear_repro/build/bin/encr_perf_test': free(): invalid next size (fast): 0x0000000000c11080 ***
+======= Backtrace: =========
+/lib64/libc.so.6(+0x7c619)[0x2b4cae987619]
+/home/<user>/BT2024190/hear_repro/build/bin/encr_perf_test[0x40161a]
+/lib64/libc.so.6(__libc_start_main+0xf5)[0x2b4cae92cc05]
+/home/<user>/BT2024190/hear_repro/build/bin/encr_perf_test[0x401cdc]
+======= Memory map: ========
+00400000-00405000 r-xp 00000000 00:28 7653943467                         /home/<user>/BT2024190/hear_repro/build/bin/encr_perf_test
+00605000-00606000 r--p 00005000 00:28 7653943467                         /home/<user>/BT2024190/hear_repro/build/bin/encr_perf_test
+00606000-00607000 rw-p 00006000 00:28 7653943467                         /home/<user>/BT2024190/hear_repro/build/bin/encr_perf_test
+00607000-00609000 rw-p 00000000 00:00 0 
+00c11000-00c32000 rw-p 00000000 00:00 0                                  [heap]
+2b4cad7f4000-2b4cad815000 r-xp 00000000 08:03 1242                       /usr/lib64/ld-2.17.so
+2b4cad815000-2b4cad819000 rw-p 00000000 00:00 0 
+2b4cad830000-2b4cad83b000 rw-p 00000000 00:00 0 
+2b4cada15000-2b4cada16000 r--p 00021000 08:03 1242                       /usr/lib64/ld-2.17.so
+2b4cada16000-2b4cada17000 rw-p 00022000 08:03 1242                       /usr/lib64/ld-2.17.so
+2b4cada17000-2b4cada18000 rw-p 00000000 00:00 0 
+2b4cada18000-2b4cadc4c000 r-xp 00000000 08:03 2243                       /usr/lib64/libcrypto.so.1.0.2k
+2b4cadc4c000-2b4cade4c000 ---p 00234000 08:03 2243                       /usr/lib64/libcrypto.so.1.0.2k
+2b4cade4c000-2b4cade68000 r--p 00234000 08:03 2243                       /usr/lib64/libcrypto.so.1.0.2k
+2b4cade68000-2b4cade75000 rw-p 00250000 08:03 2243                       /usr/lib64/libcrypto.so.1.0.2k
+2b4cade75000-2b4cade79000 rw-p 00000000 00:00 0 
+2b4cade79000-2b4cadee0000 r-xp 00000000 08:03 2245                       /usr/lib64/libssl.so.1.0.2k
+2b4cadee0000-2b4cae0e0000 ---p 00067000 08:03 2245                       /usr/lib64/libssl.so.1.0.2k
+2b4cae0e0000-2b4cae0e4000 r--p 00067000 08:03 2245                       /usr/lib64/libssl.so.1.0.2k
+2b4cae0e4000-2b4cae0eb000 rw-p 0006b000 08:03 2245                       /usr/lib64/libssl.so.1.0.2k
+2b4cae0eb000-2b4cae1d4000 r-xp 00000000 08:03 1580                       /usr/lib64/libstdc++.so.6.0.19
+2b4cae1d4000-2b4cae3d4000 ---p 000e9000 08:03 1580                       /usr/lib64/libstdc++.so.6.0.19
+2b4cae3d4000-2b4cae3dc000 r--p 000e9000 08:03 1580                       /usr/lib64/libstdc++.so.6.0.19
+2b4cae3dc000-2b4cae3de000 rw-p 000f1000 08:03 1580                       /usr/lib64/libstdc++.so.6.0.19
+2b4cae3de000-2b4cae3f3000 rw-p 00000000 00:00 0 
+2b4cae3f3000-2b4cae4f4000 r-xp 00000000 08:03 1257                       /usr/lib64/libm-2.17.so
+2b4cae4f4000-2b4cae6f3000 ---p 00101000 08:03 1257                       /usr/lib64/libm-2.17.so
+2b4cae6f3000-2b4cae6f4000 r--p 00100000 08:03 1257                       /usr/lib64/libm-2.17.so
+2b4cae6f4000-2b4cae6f5000 rw-p 00101000 08:03 1257                       /usr/lib64/libm-2.17.so
+2b4cae6f5000-2b4cae70a000 r-xp 00000000 08:03 79                         /usr/lib64/libgcc_s-4.8.5-20150702.so.1
+2b4cae70a000-2b4cae909000 ---p 00015000 08:03 79                         /usr/lib64/libgcc_s-4.8.5-20150702.so.1
+2b4cae909000-2b4cae90a000 r--p 00014000 08:03 79                         /usr/lib64/libgcc_s-4.8.5-20150702.so.1
+2b4cae90a000-2b4cae90b000 rw-p 00015000 08:03 79                         /usr/lib64/libgcc_s-4.8.5-20150702.so.1
+2b4cae90b000-2b4caeac3000 r-xp 00000000 08:03 1249                       /usr/lib64/libc-2.17.so
+2b4caeac3000-2b4caecc3000 ---p 001b8000 08:03 1249                       /usr/lib64/libc-2.17.so
+2b4caecc3000-2b4caecc7000 r--p 001b8000 08:03 1249                       /usr/lib64/libc-2.17.so
+2b4caecc7000-2b4caecc9000 rw-p 001bc000 08:03 1249                       /usr/lib64/libc-2.17.so
+2b4caecc9000-2b4caecce000 rw-p 00000000 00:00 0 
+2b4caecce000-2b4caecd0000 r-xp 00000000 08:03 1255                       /usr/lib64/libdl-2.17.so
+2b4caecd0000-2b4caeed0000 ---p 00002000 08:03 1255                       /usr/lib64/libdl-2.17.so
+2b4caeed0000-2b4caeed1000 r--p 00002000 08:03 1255                       /usr/lib64/libdl-2.17.so
+2b4caeed1000-2b4caeed2000 rw-p 00003000 08:03 1255                       /usr/lib64/libdl-2.17.so
+2b4caeed2000-2b4caeee7000 r-xp 00000000 08:03 1629                       /usr/lib64/libz.so.1.2.7
+2b4caeee7000-2b4caf0e6000 ---p 00015000 08:03 1629                       /usr/lib64/libz.so.1.2.7
+2b4caf0e6000-2b4caf0e7000 r--p 00014000 08:03 1629                       /usr/lib64/libz.so.1.2.7
+2b4caf0e7000-2b4caf0e8000 rw-p 00015000 08:03 1629                       /usr/lib64/libz.so.1.2.7
+2b4caf0e8000-2b4caf132000 r-xp 00000000 08:03 2252                       /usr/lib64/libgssapi_krb5.so.2.2
+2b4caf132000-2b4caf332000 ---p 0004a000 08:03 2252                       /usr/lib64/libgssapi_krb5.so.2.2
+2b4caf332000-2b4caf333000 r--p 0004a000 08:03 2252                       /usr/lib64/libgssapi_krb5.so.2.2
+2b4caf333000-2b4caf335000 rw-p 0004b000 08:03 2252                       /usr/lib64/libgssapi_krb5.so.2.2
+2b4caf335000-2b4caf40d000 r-xp 00000000 08:03 2262                       /usr/lib64/libkrb5.so.3.3
+2b4caf40d000-2b4caf60c000 ---p 000d8000 08:03 2262                       /usr/lib64/libkrb5.so.3.3
+2b4caf60c000-2b4caf61a000 r--p 000d7000 08:03 2262                       /usr/lib64/libkrb5.so.3.3
+2b4caf61a000-2b4caf61d000 rw-p 000e5000 08:03 2262                       /usr/lib64/libkrb5.so.3.3
+2b4caf61d000-2b4caf620000 r-xp 00000000 08:03 1649                       /usr/lib64/libcom_err.so.2.1
+2b4caf620000-2b4caf81f000 ---p 00003000 08:03 1649                       /usr/lib64/libcom_err.so.2.1
+2b4caf81f000-2b4caf820000 r--p 00002000 08:03 1649                       /usr/lib64/libcom_err.so.2.1
+2b4caf820000-2b4caf821000 rw-p 00003000 08:03 1649                       /usr/lib64/libcom_err.so.2.1
+2b4caf821000-2b4caf852000 r-xp 00000000 08:03 2256                       /usr/lib64/libk5crypto.so.3.1
+2b4caf852000-2b4cafa51000 ---p 00031000 08:03 2256                       /usr/lib64/libk5crypto.so.3.1
+2b4cafa51000-2b4cafa53000 r--p 00030000 08:03 2256                       /usr/lib64/libk5crypto.so.3.1
+2b4cafa53000-2b4cafa54000 rw-p 00032000 08:03 2256                       /usr/lib64/libk5crypto.so.3.1
+2b4cafa54000-2b4cafa61000 r-xp 00000000 08:03 2264                       /usr/lib64/libkrb5support.so.0.1
+2b4cafa61000-2b4cafc60000 ---p 0000d000 08:03 2264                       /usr/lib64/libkrb5support.so.0.1
+2b4cafc60000-2b4cafc61000 r--p 0000c000 08:03 2264                       /usr/lib64/libkrb5support.so.0.1
+2b4cafc61000-2b4cafc62000 rw-p 0000d000 08:03 2264                       /usr/lib64/libkrb5support.so.0.1
+2b4cafc62000-2b4cafc65000 r-xp 00000000 08:03 2048                       /usr/lib64/libkeyutils.so.1.5
+2b4cafc65000-2b4cafe64000 ---p 00003000 08:03 2048                       /usr/lib64/libkeyutils.so.1.5
+2b4cafe64000-2b4cafe65000 r--p 00002000 08:03 2048                       /usr/lib64/libkeyutils.so.1.5
+2b4cafe65000-2b4cafe66000 rw-p 00003000 08:03 2048                       /usr/lib64/libkeyutils.so.1.5
+2b4cafe66000-2b4cafe7c000 r-xp 00000000 08:03 1277                       /usr/lib64/libresolv-2.17.so
+2b4cafe7c000-2b4cb007c000 ---p 00016000 08:03 1277                       /usr/lib64/libresolv-2.17.so
+2b4cb007c000-2b4cb007d000 r--p 00016000 08:03 1277                       /usr/lib64/libresolv-2.17.so
+2b4cb007d000-2b4cb007e000 rw-p 00017000 08:03 1277                       /usr/lib64/libresolv-2.17.so
+2b4cb007e000-2b4cb0080000 rw-p 00000000 00:00 0 
+2b4cb0080000-2b4cb0097000 r-xp 00000000 08:03 1275                       /usr/lib64/libpthread-2.17.so
+2b4cb0097000-2b4cb0296000 ---p 00017000 08:03 1275                       /usr/lib64/libpthread-2.17.so
+2b4cb0296000-2b4cb0297000 r--p 00016000 08:03 1275                       /usr/lib64/libpthread-2.17.so
+2b4cb0297000-2b4cb0298000 rw-p 00017000 08:03 1275                       /usr/lib64/libpthread-2.17.so
+2b4cb0298000-2b4cb029c000 rw-p 00000000 00:00 0 
+2b4cb029c000-2b4cb02c0000 r-xp 00000000 08:03 1626                       /usr/lib64/libselinux.so.1
+2b4cb02c0000-2b4cb04bf000 ---p 00024000 08:03 1626                       /usr/lib64/libselinux.so.1
+2b4cb04bf000-2b4cb04c0000 r--p 00023000 08:03 1626                       /usr/lib64/libselinux.so.1
+2b4cb04c0000-2b4cb04c1000 rw-p 00024000 08:03 1626                       /usr/lib64/libselinux.so.1
+2b4cb04c1000-2b4cb04c3000 rw-p 00000000 00:00 0 
+2b4cb04c3000-2b4cb0523000 r-xp 00000000 08:03 1617                       /usr/lib64/libpcre.so.1.2.0
+2b4cb0523000-2b4cb0723000 ---p 00060000 08:03 1617                       /usr/lib64/libpcre.so.1.2.0
+2b4cb0723000-2b4cb0724000 r--p 00060000 08:03 1617                       /usr/lib64/libpcre.so.1.2.0
+2b4cb0724000-2b4cb0725000 rw-p 00061000 08:03 1617                       /usr/lib64/libpcre.so.1.2.0
+2b4cb4000000-2b4cb4021000 rw-p 00000000 00:00 0 
+2b4cb4021000-2b4cb8000000 ---p 00000000 00:00 0 
+7ffcabdfa000-7ffcabe1b000 rw-p 00000000 00:00 0                          [stack]
+7ffcabeb8000-7ffcabeba000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]

@@ -1,0 +1,8 @@
+Buffer size: 512 Bytes
+Dtype: int
+Op: sum
+Func: naive
+Avg encryption time: 4.84973e-05 sec.
+Avg encryption throughput: 0.0105573 Gbytes/sec.
+Avg decryption time: 2.43384e-05 sec.
+Avg decryption throughput: 0.0210368 Gbytes/sec.

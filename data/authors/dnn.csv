@@ -1,0 +1,9 @@
+source,model,mode,nranks,time_per_iteration
+paper,cosmoflow,baseline,256,0.172692
+paper,cosmoflow,hear,256,0.192183
+paper,dlrm,baseline,256,0.021584
+paper,dlrm,hear,256,0.02532
+paper,gpt3,baseline,384,301.981501
+paper,gpt3,hear,384,311.407519
+paper,resnet,baseline,256,0.867969
+paper,resnet,hear,256,1.139089

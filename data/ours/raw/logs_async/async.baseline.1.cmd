@@ -1,0 +1,1 @@
+2026-11-20 03:54:53 mpirun -n 20 -ppn 10 -hosts compute01.local,compute02.local -genv I_MPI_PIN_PROCESSOR_LIST 0-9 /home/<user>/BT2024190/hear_repro/build/bin/osu_allreduce_int -m 16777216:16777216 -f -i 300

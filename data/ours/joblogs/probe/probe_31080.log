@@ -1,0 +1,99 @@
+== probe job 31080.master.local as student3 on compute01.local at 2026-11-19 23:49:45
+nodes: compute01.local compute02.local
+== node facts
+--- compute01.local
+CPU(s):                20
+Thread(s) per core:    1
+Socket(s):             2
+NUMA node(s):          2
+Model name:            Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz
+CPU max MHz:           3100.0000
+aes=20 avx2=20
+governor=powersave no_turbo=1
+memlock=unlimited
+Mem:            125           1          61           0          63         123
+mlx5_0 rate=40 Gb/sec (4X QDR) state=4: ACTIVE
+dat.conf entries: 62
+--- compute02.local
+CPU(s):                20
+Thread(s) per core:    1
+Socket(s):             2
+NUMA node(s):          2
+Model name:            Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz
+CPU max MHz:           3100.0000
+aes=20 avx2=20
+governor=powersave no_turbo=1
+memlock=unlimited
+Mem:            125           1          61           0          63         123
+mlx5_0 rate=40 Gb/sec (4X QDR) state=4: ACTIVE
+dat.conf entries: 62
+== shared-library check on compute node
+(ldd check done)
+== quick single-core encryption (int aesni, 4 MiB buffer, 200 iters)
+Avg encryption throughput: 7.59205 Gbytes/sec.
+Avg decryption throughput: 10.9657 Gbytes/sec.
+== fabric survey: 2 ranks (1/node), 16 MiB int allreduce, 50 iters
+--- fabric=default  -> ?  avg_lat_us=14475.83
+--- fabric=shm:dapl  -> MPI startup(): shm and dapl data transfer modes  avg_lat_us=14434.94
+--- fabric=shm:ofa  -> MPI startup(): shm and ofa data transfer modes  avg_lat_us=14919.33
+--- fabric=shm:tmi  -> ?  avg_lat_us=FAILED
+compute02.local.125690ipath_wait_for_device: The /dev/ipath device failed to appear after 30.0 seconds: Connection timed out
+--- fabric=shm:ofi  -> ?  avg_lat_us=FAILED
+[0] MPID_nem_ofi_init(): cannot load default ofi library libfabric.so, error=libfabric.so.1: cannot open shared object file: No such file or directory
+--- fabric=tcp  -> ?  avg_lat_us=150782.31
+BEST_FABRIC=shm:dapl (14434.94 us)
+== point-to-point link characterisation (fabric shm:dapl)
+65536                3781.03
+131072               3790.87
+262144               2080.36
+524288               2407.34
+1048576              2753.87
+2097152              2991.84
+4194304              3104.43
+8388608              3159.41
+16777216             3192.04
+0                       1.39
+1                       1.40
+2                       1.40
+4                       1.46
+8                       1.47
+16                      1.46
+32                      2.06
+64                      2.06
+== libhear interception: critical-path variants print TSC cycles at MPI_Finalize
+--- baseline
+16                      1.90              0.96              2.84       20000
+comm=3792
+--- naive
+16                      5.35              4.58              6.12       20000
+comm=4632
+mmalloc=168
+mfree=107
+encrypt=2669
+decrypt=2050
+--- mpool
+16                      2.72              1.97              3.47       20000
+comm=3923
+mmalloc=125
+mfree=138
+encrypt=92
+decrypt=86
+== end-to-end correctness smoke test (DCHECK asserts memcmp vs plain MPI), int sum 4B..16MiB
+dcheck_sync rc=0
+dcheck_pipelined rc=0
+== pipelining risk check: 16 MiB int allreduce, baseline vs sync HEAR vs pipelined HEAR
+--- 2 ranks (1 per node)
+baseline        avg_lat_us=12415.45
+hear_sync       avg_lat_us=20541.41
+hear_pipe bs=16384 avg_lat_us=15901.24
+hear_pipe bs=65536 avg_lat_us=20894.35
+hear_pipe bs=262144 avg_lat_us=18089.64
+hear_pipe bs=65536 +I_MPI_ASYNC_PROGRESS avg_lat_us=24265.46
+hear_pipe bs=65536 +MPICH_ASYNC_PROGRESS avg_lat_us=24110.52
+--- 40 ranks (20 per node)
+baseline        avg_lat_us=183949.61
+hear_sync       avg_lat_us=272320.19
+hear_pipe bs=16384 avg_lat_us=308428.24
+hear_pipe bs=65536 avg_lat_us=307674.32
+hear_pipe bs=262144 avg_lat_us=203768.80
+== probe done at 2026-11-19 23:52:16

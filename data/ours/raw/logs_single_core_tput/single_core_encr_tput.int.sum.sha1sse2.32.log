@@ -1,0 +1,8 @@
+Buffer size: 128 Bytes
+Dtype: int
+Op: sum
+Func: sha1sse2
+Avg encryption time: 3.06829e-06 sec.
+Avg encryption throughput: 0.041717 Gbytes/sec.
+Avg decryption time: 1.52414e-06 sec.
+Avg decryption throughput: 0.083982 Gbytes/sec.

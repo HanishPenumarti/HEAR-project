@@ -1,0 +1,4 @@
+== 2026-11-20 00:59:07 job 31085.master.local on compute04.local dtypes=float no_turbo=1
+2026-11-20 01:01:10 float/aesni_unroll (2M items): encryption 0.226179 GB/s; decryption 0.371647 GB/s; 
+2026-11-20 01:29:14 float/naive (2M items): encryption 0.020808 GB/s; decryption 0.0203314 GB/s; 
+== 2026-11-20 01:29:14 done

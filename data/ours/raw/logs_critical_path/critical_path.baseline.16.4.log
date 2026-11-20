@@ -1,0 +1,5 @@
+
+# OSU MPI Allreduce Latency Test v7.0
+# Size       Avg Latency(us)   Min Latency(us)   Max Latency(us)  Iterations
+16                      1.97              1.01              2.92      100000
+comm=3938

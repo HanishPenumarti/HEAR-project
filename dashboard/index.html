@@ -1,0 +1,908 @@
+<meta name="dash-one-writer">
+<style>
+/* Layout: one reading column; each result is a section = heading, finding, chart, table. */
+.hr { --hr-paper: var(--color-fg); max-width: 72rem; margin: 0 auto; display: grid; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.hr h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.hr h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; text-wrap: balance; }
+.hr h3 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: 0; }
+.hr p { margin: 0; max-width: 68ch; line-height: 1.55; }
+.hr-head { display: grid; gap: var(--cds-gap-sm); }
+.hr-lede { font-size: var(--cds-font-size-heading); line-height: 1.4; }
+.hr-meta { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.hr-sec { display: grid; gap: var(--cds-gap-md); padding-top: var(--cds-pad-lg); border-top: 1px solid var(--color-border-line); min-width: 0; }
+.hr-eyebrow { font-size: var(--cds-font-size-caption); letter-spacing: .06em; text-transform: uppercase; color: var(--color-fg-muted); }
+.hr-find b, .hr-lede b { font-weight: var(--cds-font-weight-medium); font-variant-numeric: tabular-nums; }
+.hr-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-lg); }
+.hr-two > * { min-width: 0; }
+.hr-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-sm); min-width: 0; }
+.hr-fig { margin: 0; display: grid; gap: var(--cds-gap-sm); min-width: 0; }
+.hr-fig figcaption { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); max-width: 68ch; line-height: 1.5; }
+.hr-chart { position: relative; min-height: 220px; min-width: 0; }
+.hr-chart.hr-tall { min-height: 300px; }
+.hr-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.hr-ph { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); padding: var(--cds-pad-md) 0; }
+.hr-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--cds-text-secondary); align-items: center; }
+.hr-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.hr-key { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.hr-key.hr-line { width: 14px; height: 2px; border-radius: 1px; }
+.hr-key.hr-ring { width: 8px; height: 8px; border-radius: 50%; background: transparent !important; border: 2px solid; }
+.hr-key.hr-dot { width: 9px; height: 9px; border-radius: 50%; }
+.hr-k-paper { background: var(--hr-c0); border-color: var(--hr-c0); }
+.hr-k-ours { background: var(--hr-c1); border-color: var(--hr-c1); }
+.hr-k-muted { background: var(--cds-chart-muted); }
+.hr-axis text, .hr-lab { font-size: var(--cds-font-size-caption); fill: var(--cds-text-secondary); font-family: var(--font-anthropic-sans); }
+.hr-axis path, .hr-axis line { stroke: var(--cds-chart-axis); }
+.hr-grid line { stroke: var(--cds-chart-grid); }
+.hr-grid path { display: none; }
+.hr-val { font-size: var(--cds-font-size-caption); fill: var(--color-fg); font-family: var(--font-anthropic-sans); font-variant-numeric: tabular-nums; }
+.hr-cat { font-size: var(--cds-font-size-caption); fill: var(--color-fg); font-family: var(--font-anthropic-sans); }
+.hr-tip { position: absolute; z-index: 5; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-md); font-size: var(--cds-font-size-caption); display: grid; gap: 4px; min-width: 9rem; max-width: 18rem; }
+.hr-tip-h { color: var(--cds-text-secondary); }
+.hr-tip-row { display: flex; align-items: center; gap: 8px; }
+.hr-tip-row b { font-variant-numeric: tabular-nums; }
+.hr-tip-row span:last-child { color: var(--cds-text-secondary); }
+.hr-tip-key { width: 12px; height: 2px; display: inline-block; flex: none; }
+.hr-hit:focus { outline: 2px solid var(--color-fg); outline-offset: 1px; }
+.hr-scroll { overflow-x: auto; min-width: 0; }
+.hr table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.hr th { text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: 6px 10px 6px 0; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.hr td { padding: 6px 10px 6px 0; border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.hr td.hr-num, .hr th.hr-num { text-align: right; white-space: nowrap; }
+.hr details > summary { cursor: pointer; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.hr details[open] > summary { margin-bottom: var(--cds-gap-sm); }
+.hr-pill { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.hr-pill::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--cds-chart-muted); flex: none; }
+.hr-pill[data-k="ok"]::before { background: var(--color-ok); }
+.hr-pill[data-k="warn"]::before { background: var(--color-warn); }
+.hr-pill[data-k="bad"]::before { background: var(--color-bad); }
+.hr-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--cds-gap-md); }
+.hr-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: grid; gap: 4px; }
+.hr-tile .hr-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.15; }
+.hr-tile .hr-small { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.hr-notes { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); display: grid; gap: var(--cds-gap-sm); }
+.hr-notes ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 72ch; }
+@media print { .hr-sec { break-before: auto; } .hr details { display: block; } }
+</style>
+
+<article class="hr" id="report">
+  <header class="hr-head" id="top">
+    <div class="hr-eyebrow">SC ’23 · Chrapek, Khalilov, Hoefler · reproduction</div>
+    <h1 id="title">HEAR, reproduced on a 4-node InfiniBand cluster</h1>
+    <p class="hr-lede" id="summary"><b data-draw="sum_exact" data-source="verdicts" data-field="exact" data-row="0">—</b> of the <b data-draw="sum_total" data-source="verdicts" data-field="total" data-row="0">—</b> results match the paper exactly, <b data-draw="sum_repro" data-source="verdicts" data-field="reproduced" data-row="0">—</b> more reproduce its trend, and <b data-draw="sum_part" data-source="verdicts" data-field="partial" data-row="0">—</b> reproduce only in part on our hardware.</p>
+    <p class="hr-meta">Paper numbers are recomputed from the authors’ own raw logs with the same formulas as ours, so each pair compares like with like. Our runs used at most 4 nodes; the paper’s GPT-3 run (48 nodes) is out of scope.</p>
+  </header>
+
+  <section class="hr-sec" id="scorecard">
+    <h2>Scorecard</h2>
+    <div class="hr-scroll">
+      <table data-source="scorecard" data-row-key="result">
+        <thead><tr>
+          <th data-field="result">Result</th>
+          <th data-field="where">In the paper</th>
+          <th data-field="paper">Paper</th>
+          <th data-field="ours">Ours</th>
+          <th data-field="verdict">Verdict</th>
+        </tr></thead>
+        <tbody data-draw="score_rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="hr-sec" id="setup">
+    <h2>Two very different machines</h2>
+    <p>The paper ran on Piz Daint. Ours is a small departmental cluster: the same CPU generation, but fewer cores per node, a network about 2.5 times slower, and a different MPI library. Absolute speeds therefore differ; the comparison that matters is HEAR relative to native MPI on the same machine.</p>
+    <div class="hr-scroll">
+      <table data-source="setup" data-row-key="aspect">
+        <thead><tr><th data-field="aspect">Aspect</th><th data-field="paper">Paper (Piz Daint)</th><th data-field="ours">Ours</th></tr></thead>
+        <tbody data-draw="setup_rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="hr-sec" id="precision">
+    <div class="hr-eyebrow">Accuracy · Fig 3</div>
+    <h2>Float precision loss: identical to the paper</h2>
+    <p class="hr-find"><b data-draw="prec_ident" data-source="prec_count" data-field="identical" data-row="0">—</b> of <b data-draw="prec_files" data-source="prec_count" data-field="files" data-row="0">—</b> result files (relative errors of encrypted sums and products, printed to ~300 digits) are bit-for-bit identical to the authors’ published files. Same code, same seed, same MPFR version: the encryption math reproduces exactly.</p>
+    <figure class="hr-fig" data-source="precision prec_match">
+      <div class="hr-legend"><span><i class="hr-key hr-ring hr-k-paper"></i>Paper median</span><span><i class="hr-key hr-dot hr-k-ours"></i>Our median</span><span><i class="hr-key hr-line hr-k-ours"></i>Our middle 50%</span></div>
+      <div class="hr-two">
+        <div><h3>Addition</h3><div class="hr-chart hr-tall" data-draw="prec_add">—</div></div>
+        <div><h3>Multiplication</h3><div class="hr-chart" data-draw="prec_mul">—</div></div>
+      </div>
+      <figcaption>Relative error after encrypt → reduce → decrypt, log scale. γ is the number of extra ciphertext bits (γ = 2 is the most precise). FP16 multiplication has few valid samples because most products overflow FP16.</figcaption>
+    </figure>
+    <details>
+      <summary>File-by-file comparison</summary>
+      <div class="hr-scroll">
+        <table data-source="prec_match" data-row-key="op,precision">
+          <thead><tr><th data-field="op">Operation</th><th data-field="precision">Type</th><th data-field="rows_paper" class="hr-num">Rows, paper</th><th data-field="rows_ours" class="hr-num">Rows, ours</th><th data-field="differing_rows" class="hr-num">Rows that differ</th><th data-field="identical">Identical</th></tr></thead>
+          <tbody data-draw="prec_rows"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section class="hr-sec" id="security">
+    <div class="hr-eyebrow">Security · §5.3.1</div>
+    <h2>Ciphertext-only attack on HEAR floats</h2>
+    <p>The paper bounds how much a MAP adversary gains from the non-uniform mantissa distribution by enumerating every FP32 plaintext mantissa against every noise mantissa (2<sup>23</sup> × 2<sup>21</sup> encryptions). A uniform guess succeeds with probability 2<sup>−23</sup>.</p>
+    <div class="hr-scroll">
+      <table data-source="security" data-row-key="source">
+        <thead><tr><th data-field="source">Run</th><th data-field="max_label" class="hr-num">Max likelihood</th><th data-field="avg_label" class="hr-num">Average</th><th data-field="min_label" class="hr-num">Min</th><th data-field="uniform_label" class="hr-num">Uniform guess</th><th data-field="status">Status</th></tr></thead>
+        <tbody data-draw="sec_rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="hr-sec" id="correctness">
+    <div class="hr-eyebrow">Correctness · §6</div>
+    <h2>Encryption is lossless for integers and near-lossless for floats</h2>
+    <p>We ran the authors’ two unit tests and the paper’s end-to-end check: a libhear build that compares every encrypted <code>MPI_Allreduce</code> result with a plain one on the same data, byte for byte.</p>
+    <div class="hr-scroll">
+      <table data-source="correctness" data-row-key="check,scope">
+        <thead><tr><th data-field="check">Check</th><th data-field="source">Run</th><th data-field="scope">Scope</th><th data-field="result">Result</th><th data-field="passed">Passed</th></tr></thead>
+        <tbody data-draw="corr_rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="hr-sec" id="encryption">
+    <div class="hr-eyebrow">Performance · Fig 5</div>
+    <h2>How fast one core encrypts</h2>
+    <p class="hr-find">Hand-tuned AES-NI encrypts integers at <b data-draw="enc_ours" data-source="encryption" data-field="mean_gbs" data-where="source=Ours&amp;dtype=int&amp;prf=AES-NI (hand-tuned SSE2)&amp;mode=encryption">—</b> GB/s per core here, against <b data-draw="enc_paper" data-source="encryption" data-field="mean_gbs" data-where="source=Paper&amp;dtype=int&amp;prf=AES-NI (hand-tuned SSE2)&amp;mode=encryption">—</b> GB/s in the paper; the SHA1 variants stay below 1 GB/s on both machines. Our nodes run with Turbo Boost off (2.2 GHz), which accounts for most of the gap.</p>
+    <figure class="hr-fig" data-source="encryption">
+      <div class="hr-legend"><span><i class="hr-key hr-k-paper"></i>Paper</span><span><i class="hr-key hr-k-ours"></i>Ours</span></div>
+      <div class="hr-two">
+        <div><h3>Encryption</h3><div class="hr-chart hr-tall" data-draw="enc_chart">—</div></div>
+        <div><h3>Decryption</h3><div class="hr-chart hr-tall" data-draw="dec_chart">—</div></div>
+      </div>
+      <figcaption>Single core, 1000 iterations per buffer size; bars are the mean over 21 buffer sizes (8 B to 8 MiB) as in the paper, log scale. Ours is the GCC 4.8.5 build.</figcaption>
+    </figure>
+    <figure class="hr-fig" data-source="compilers" id="compilers">
+      <h3>The compiler decides the speed of the “compiler-vectorized” routines</h3>
+      <p>libhear’s hand-tuned integer routine runs at the same speed whichever compiler builds it. Its other two AES-NI routines, including the one libhear uses for every <code>MPI_FLOAT</code> Allreduce, are plain C++ that only becomes SIMD if the compiler vectorizes it. The paper used clang 13; none of the three compilers on our cluster get close.</p>
+      <div class="hr-legend"><span><i class="hr-key hr-k-paper"></i>Paper, clang 13</span><span><i class="hr-key hr-k-ours"></i>GCC 4.8.5</span><span><i class="hr-key" style="background:var(--hr-c2)"></i>GCC 9.3</span><span><i class="hr-key" style="background:var(--hr-c3)"></i>Intel icpc 18</span></div>
+      <div class="hr-chart" data-draw="cc_chart">—</div>
+      <figcaption>Encryption throughput on one core for an 8 MiB buffer, same source code and flags, log scale. Our DNN runs (Fig 9) therefore use the GCC 9.3 build.</figcaption>
+    </figure>
+    <details>
+      <summary>Table</summary>
+      <div class="hr-scroll">
+        <table data-source="encryption" data-row-key="source,dtype,prf,mode">
+          <thead><tr><th data-field="source">Run</th><th data-field="dtype">Data</th><th data-field="prf">PRF variant</th><th data-field="mode">Direction</th><th data-field="mean_gbs" class="hr-num">Mean GB/s</th><th data-field="std_gbs" class="hr-num">Std dev</th></tr></thead>
+          <tbody data-draw="enc_rows"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section class="hr-sec" id="latency">
+    <div class="hr-eyebrow">Performance · Fig 4</div>
+    <h2>Latency overhead on a 16-byte Allreduce</h2>
+    <p class="hr-find">With the AES-NI PRF, encryption adds <b data-draw="lat_ours" data-source="breakdown" data-field="overhead_pct" data-where="source=Ours&amp;variant=HEAR with AES-NI PRF">—</b>% to the communication time here (paper: <b data-draw="lat_paper" data-source="breakdown" data-field="overhead_pct" data-where="source=Paper&amp;variant=HEAR with AES-NI PRF">—</b>%). The SHA1 PRF adds <b data-draw="sha_ours" data-source="breakdown" data-field="overhead_pct" data-where="source=Ours&amp;variant=HEAR with SHA1 PRF">—</b>% (paper: <b data-draw="sha_paper" data-source="breakdown" data-field="overhead_pct" data-where="source=Paper&amp;variant=HEAR with SHA1 PRF">—</b>%).</p>
+    <figure class="hr-fig" data-source="breakdown">
+      <div class="hr-legend"><span><i class="hr-key hr-k-muted"></i>Communication</span><span><i class="hr-key" style="background:var(--hr-c2)"></i>Memory alloc</span><span><i class="hr-key" style="background:var(--hr-c3)"></i>Encrypt</span><span><i class="hr-key" style="background:var(--hr-c4)"></i>Decrypt</span><span><i class="hr-key" style="background:var(--hr-c5)"></i>Memory free</span></div>
+      <div class="hr-chart" data-draw="lat_chart">—</div>
+      <figcaption>Critical path of one integer-sum <code>MPI_Allreduce</code> on 2 ranks (one per node), measured with RDTSC over 100,000 iterations × 5 trials. The percentage is total ÷ communication − 1, as in the paper. The time-stamp counter ticks at the nominal clock; Piz Daint’s cores ran faster under Turbo Boost, so the paper’s compute stages count fewer ticks.</figcaption>
+    </figure>
+    <details>
+      <summary>Table</summary>
+      <div class="hr-scroll">
+        <table data-source="breakdown" data-row-key="source,variant">
+          <thead><tr><th data-field="source">Run</th><th data-field="variant">Variant</th><th data-field="comm" class="hr-num">Comm (cycles)</th><th data-field="encrypt" class="hr-num">Encrypt</th><th data-field="decrypt" class="hr-num">Decrypt</th><th data-field="mem_alloc" class="hr-num">Alloc</th><th data-field="mem_free" class="hr-num">Free</th><th data-field="overhead_pct" class="hr-num">Overhead %</th><th data-field="latency_us" class="hr-num">OSU latency µs</th></tr></thead>
+          <tbody data-draw="lat_rows"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section class="hr-sec" id="blocksize">
+    <div class="hr-eyebrow">Performance · Fig 6</div>
+    <h2>Pipelining block size for a 16 MiB Allreduce</h2>
+    <p class="hr-find">Our best block is <b data-draw="bs_best_ours" data-source="blocksize" data-field="block_label" data-where="source=Ours&amp;is_best=yes">—</b>, reaching <b data-draw="bs_pct_ours" data-source="blocksize" data-field="pct_of_native" data-where="source=Ours&amp;is_best=yes">—</b>% of native throughput (paper: <b data-draw="bs_best_paper" data-source="blocksize" data-field="block_label" data-where="source=Paper&amp;is_best=yes">—</b> at <b data-draw="bs_pct_paper" data-source="blocksize" data-field="pct_of_native" data-where="source=Paper&amp;is_best=yes">—</b>%). Synchronous HEAR, without pipelining, reaches <b data-draw="bs_sync_ours" data-source="blocksize" data-field="pct_of_native" data-where="source=Ours&amp;variant=Synchronous HEAR">—</b>% here and <b data-draw="bs_sync_paper" data-source="blocksize" data-field="pct_of_native" data-where="source=Paper&amp;variant=Synchronous HEAR">—</b>% in the paper.</p>
+    <figure class="hr-fig" data-source="blocksize">
+      <div class="hr-legend"><span><i class="hr-key hr-line hr-k-paper"></i>Paper, pipelined (2 nodes × 36)</span><span><i class="hr-key hr-line hr-k-ours"></i>Ours, pipelined (2 nodes × 20)</span><span><i class="hr-key hr-line hr-k-paper" style="opacity:.45"></i><i class="hr-key hr-line hr-k-ours" style="opacity:.45"></i>Synchronous HEAR (faint line, each run’s colour)</span></div>
+      <div class="hr-chart hr-tall" data-draw="bs_chart">—</div>
+      <figcaption>Throughput per rank of a 16 MiB integer-sum Allreduce at full node occupancy, as a percentage of native MPI on the same nodes. Block size is in bytes (4 × the element count libhear takes).</figcaption>
+    </figure>
+    <p class="hr-find">Above 100% the gain is not encryption overlapping communication. Splitting a 16 MiB Allreduce into 1 MiB pieces makes Intel MPI itself faster: our control, which makes the same chunked calls without encrypting, reaches <b data-draw="bs_chunk40" data-source="scaling" data-field="chunked_native_pct" data-where="source=Ours&amp;dtype=int&amp;nranks=40">—</b>% of the default Allreduce at 40 ranks (Fig 7 table). Turning on Intel MPI’s background progress threads, which would let a block travel while the next one is encrypted, makes things worse: pipelined HEAR with 256 KiB blocks drops from <b data-draw="as_pipe" data-source="async_diag" data-field="pct_of_native" data-where="variant=Pipelined HEAR&amp;block_label=256 KiB">—</b>% to <b data-draw="as_pipe_async" data-source="async_diag" data-field="pct_of_native" data-where="variant=Pipelined HEAR + progress threads&amp;block_label=256 KiB">—</b>% of native.</p>
+    <figure class="hr-fig" data-source="async_diag" id="async">
+      <h3>Diagnostic: pipelining with background progress turned on</h3>
+      <div class="hr-legend"><span><i class="hr-key hr-k-ours"></i>Intel MPI default</span><span><i class="hr-key" style="background:var(--hr-c2)"></i>With progress threads on idle cores</span></div>
+      <div class="hr-chart" data-draw="async_chart">—</div>
+      <figcaption>2 nodes × 10 ranks, 16 MiB integer sum. Ranks run on cores 0–9; with <code>I_MPI_ASYNC_PROGRESS=1</code>, Intel MPI’s progress threads are pinned to cores 10–19. Percentages are of native MPI without progress threads.</figcaption>
+    </figure>
+    <details>
+      <summary>Table</summary>
+      <div class="hr-scroll">
+        <table data-source="blocksize" data-row-key="source,variant,block_label">
+          <thead><tr><th data-field="source">Run</th><th data-field="variant">Variant</th><th data-field="block_label">Block</th><th data-field="pct_of_native" class="hr-num">% of native</th><th data-field="tput_rank_gbs" class="hr-num">GB/s per rank</th></tr></thead>
+          <tbody data-draw="bs_rows"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section class="hr-sec" id="throughput">
+    <div class="hr-eyebrow">Performance · Fig 7</div>
+    <h2>Throughput as ranks and nodes grow</h2>
+    <p class="hr-find">With full nodes, HEAR’s best setting reaches <b data-draw="tp_ours40" data-source="scaling" data-field="best_pct" data-where="source=Ours&amp;dtype=int&amp;nranks=40">—</b>% of Intel MPI’s default Allreduce on 2 nodes and <b data-draw="tp_ours80" data-source="scaling" data-field="best_pct" data-where="source=Ours&amp;dtype=int&amp;nranks=80">—</b>% on 4 nodes. Against native MPI split into the same blocks without encryption, it reaches <b data-draw="tp_fair40" data-source="scaling" data-field="best_vs_best_native_pct" data-where="source=Ours&amp;dtype=int&amp;nranks=40">—</b>% and <b data-draw="tp_fair80" data-source="scaling" data-field="best_vs_best_native_pct" data-where="source=Ours&amp;dtype=int&amp;nranks=80">—</b>%. The paper reports about 80% from 2 to 32 nodes against Cray MPICH’s default.</p>
+    <figure class="hr-fig" data-source="scaling">
+      <div class="hr-legend"><span><i class="hr-key hr-line hr-k-paper"></i>Paper, vs default MPI</span><span><i class="hr-key hr-line hr-k-ours"></i>Ours, vs default MPI</span><span><i class="hr-key hr-line" style="background:var(--hr-c2)"></i>Ours, vs MPI chunked like HEAR</span></div>
+      <div class="hr-chart" data-draw="tp_pct">—</div>
+      <figcaption>HEAR throughput as a percentage of native, 16 MiB integer sum. Both runs first add ranks on 2 nodes, from 1 per node up to every core (72 ranks in the paper, 40 here), then add full nodes. Our curve stops at 4 nodes (80 ranks). In the two panels below, the paper’s HEAR line uses its 256 KiB block and ours uses the best block at each point.</figcaption>
+    </figure>
+    <div class="hr-two" data-source="scaling">
+      <figure class="hr-fig"><h3>Paper: GB/s per node</h3><div class="hr-legend"><span><i class="hr-key hr-line hr-k-muted"></i>Native</span><span><i class="hr-key hr-line hr-k-paper"></i>HEAR</span></div><div class="hr-chart" data-draw="tp_abs_paper">—</div></figure>
+      <figure class="hr-fig"><h3>Ours: GB/s per node</h3><div class="hr-legend"><span><i class="hr-key hr-line hr-k-muted"></i>Native</span><span><i class="hr-key hr-line hr-k-ours"></i>HEAR</span></div><div class="hr-chart" data-draw="tp_abs_ours">—</div></figure>
+    </div>
+    <details>
+      <summary>Table</summary>
+      <div class="hr-scroll">
+        <table data-source="scaling" data-row-key="source,dtype,nranks">
+          <thead><tr><th data-field="source">Run</th><th data-field="dtype">Data</th><th data-field="nranks" class="hr-num">Ranks</th><th data-field="nodes" class="hr-num">Nodes</th><th data-field="ppn" class="hr-num">Per node</th><th data-field="native_gbs_node" class="hr-num">Native GB/s/node</th><th data-field="hear_gbs_node" class="hr-num">HEAR (256 KiB)</th><th data-field="hear_pct" class="hr-num">%</th><th data-field="sync_pct" class="hr-num">Synchronous %</th><th data-field="best_block_label">Best setting</th><th data-field="best_pct" class="hr-num">% at best</th><th data-field="chunked_native_pct" class="hr-num">Chunked MPI % of default</th><th data-field="best_vs_best_native_pct" class="hr-num">Best HEAR % of best MPI</th></tr></thead>
+          <tbody data-draw="tp_rows"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section class="hr-sec" id="latency-scaling">
+    <div class="hr-eyebrow">Performance · Fig 8</div>
+    <h2>Small-message latency as ranks and nodes grow</h2>
+    <p class="hr-find">For a 16-byte Allreduce, HEAR’s latency differs from native by <b data-draw="ls_ours80" data-source="scaling" data-field="lat_overhead_pct" data-where="source=Ours&amp;dtype=int&amp;nranks=80">—</b>% at 4 full nodes here (negative means faster). As in the paper, the overhead is clearest with few ranks and disappears into run-to-run noise once nodes are full, sometimes landing below native.</p>
+    <figure class="hr-fig" data-source="scaling">
+      <div class="hr-legend"><span><i class="hr-key hr-line hr-k-paper"></i>Paper</span><span><i class="hr-key hr-line hr-k-ours"></i>Ours</span></div>
+      <div class="hr-chart" data-draw="ls_pct">—</div>
+      <figcaption>HEAR latency minus native latency, as a percentage of native, for a 16-byte integer sum (100,000 iterations × 2 trials).</figcaption>
+    </figure>
+    <div class="hr-two" data-source="scaling">
+      <figure class="hr-fig"><h3>Paper: latency µs</h3><div class="hr-legend"><span><i class="hr-key hr-line hr-k-muted"></i>Native</span><span><i class="hr-key hr-line hr-k-paper"></i>HEAR</span></div><div class="hr-chart" data-draw="ls_abs_paper">—</div></figure>
+      <figure class="hr-fig"><h3>Ours: latency µs</h3><div class="hr-legend"><span><i class="hr-key hr-line hr-k-muted"></i>Native</span><span><i class="hr-key hr-line hr-k-ours"></i>HEAR</span></div><div class="hr-chart" data-draw="ls_abs_ours">—</div></figure>
+    </div>
+    <details>
+      <summary>Table</summary>
+      <div class="hr-scroll">
+        <table data-source="scaling" data-row-key="source,dtype,nranks">
+          <thead><tr><th data-field="source">Run</th><th data-field="dtype">Data</th><th data-field="nranks" class="hr-num">Ranks</th><th data-field="nodes" class="hr-num">Nodes</th><th data-field="lat_native_us" class="hr-num">Native µs</th><th data-field="lat_hear_us" class="hr-num">HEAR µs</th><th data-field="lat_overhead_pct" class="hr-num">Overhead %</th></tr></thead>
+          <tbody data-draw="ls_rows"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section class="hr-sec" id="training">
+    <div class="hr-eyebrow">Application · Fig 9</div>
+    <h2>Overhead in simulated deep-learning training</h2>
+    <p class="hr-find">One training iteration of the authors’ proxy apps takes <b data-draw="dnn_resnet" data-source="dnn" data-field="hear_pct" data-where="source=Ours&amp;model=ResNet-152&amp;nranks=80&amp;build=GCC 9.3">—</b>% of its native time with HEAR for ResNet-152 at 80 ranks (paper, 256 ranks: <b data-draw="dnn_resnet_p" data-source="dnn" data-field="hear_pct" data-where="source=Paper&amp;model=ResNet-152">—</b>%). The proxies reduce floats, and libhear’s float encryption is the compiler-dependent routine from Fig 5: built with GCC 9.3 it encrypts <b data-draw="cc_gcc9" data-source="compilers" data-field="enc_gbs" data-where="compiler=GCC 9.3&amp;variant=float · compiler-vectorized (libhear's float path)">—</b> GB/s per core, against <b data-draw="cc_clang" data-source="compilers" data-field="enc_gbs" data-where="compiler=clang 13&amp;variant=float · compiler-vectorized (libhear's float path)">—</b> GB/s with the paper’s clang 13. Most of our extra overhead comes from that, not from the network. ResNet-152 uses the authors’ proxy with 10 timed iterations instead of 100, because the full run exceeded our 40-minute limit per run at 80 ranks. GPT-3 needs 384 ranks and was not run.</p>
+    <figure class="hr-fig" data-source="dnn">
+      <div class="hr-legend"><span><i class="hr-key hr-k-paper"></i>Paper (256 ranks; GPT-3 384; clang 13)</span><span><i class="hr-key hr-k-ours"></i>Ours (80 ranks, 4 nodes; GCC 9.3)</span></div>
+      <div class="hr-chart" data-draw="dnn_chart">—</div>
+      <figcaption>Time per iteration with HEAR as a percentage of native (100% = no overhead). Compute is simulated with sleeps, communication is real MPI, as in the paper.</figcaption>
+    </figure>
+    <details>
+      <summary>Table</summary>
+      <div class="hr-scroll">
+        <table data-source="dnn" data-row-key="source,model,nranks,build">
+          <thead><tr><th data-field="source">Run</th><th data-field="model">Model</th><th data-field="nranks" class="hr-num">Ranks</th><th data-field="build">libhear compiler</th><th data-field="native_s" class="hr-num">Native s/iter</th><th data-field="hear_s" class="hr-num">HEAR s/iter</th><th data-field="hear_pct" class="hr-num">HEAR % of native</th></tr></thead>
+          <tbody data-draw="dnn_rows"></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <details class="hr-notes" id="method">
+    <summary>How this was run, and what differs from the paper</summary>
+    <ul>
+      <li>Code: libhear at commit 88f114f with Intel MPI 2018 Update 2 (the paper used Cray MPICH), OpenSSL 1.0.2k (the code only calls <code>SHA1()</code>), and MPFR 4.1.0 built for the precision tests, as in the paper.</li>
+      <li>Compilers: the paper used clang 13, which our cluster lacks. Everything was built with the system GCC 4.8.5 (<code>-std=c++11</code> added). The DNN runs use a GCC 9.3 build (Red Hat devtoolset-9) because its float encryption is fastest of the compilers we have; Intel icpc 18 was also tried. All builds pass the end-to-end memcmp check.</li>
+      <li>Benchmarks: the authors’ OSU 7.0.1 Allreduce benchmark (their integer patch) and their DNN proxies, run through their <code>LD_PRELOAD</code> interposition, with their environment variables and block sizes. MPI used the DAPL InfiniBand fabric, the fastest in a survey of all fabrics.</li>
+      <li>Scale: Piz Daint’s 36 cores per node become our 20, so “2 nodes, full” is 40 ranks here and 72 in the paper. Node scaling stops at 4 nodes (80 ranks); the paper goes to 32 nodes (1,152 ranks). The DNN proxies ran at 80 ranks instead of 256.</li>
+      <li>Iterations: 16 MiB runs use 300 iterations instead of 1000, since each takes about 3.4 times longer on our 40 Gb/s link; small messages use the paper’s 100,000.</li>
+      <li>Security: the authors’ driver hard-codes 95 workers for 96 ranks; we set it to all 80 ranks. Nothing else changed.</li>
+      <li>Fig 9: the ResNet-152 proxy ran with 5 warm-up and 10 timed iterations instead of 100 and 100, because the full run exceeded the 40-minute limit we set per run at 80 ranks. It reports the same per-iteration average.</li>
+      <li>Not in the paper, added to explain what we saw: synchronous HEAR at every scaling point; a control library (<code>control/chunk.c</code>) that chunks native MPI exactly like HEAR’s pipeline without encrypting; a run with Intel MPI’s progress threads; and the compiler comparison.</li>
+      <li>Fig 5’s driver script is a Python program; the compute nodes have no Python 3, so the same commands ran from a bash loop.</li>
+      <li>Jobs ran through the cluster’s PBS submission wrapper, on nodes with Hyper-Threading off and Turbo Boost off.</li>
+    </ul>
+  </details>
+</article>
+
+<script>
+/* Shared drawing helpers. Paper = dash.colors[0], Ours = dash.colors[1] everywhere. */
+window.HR = (function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const col = (i) => (window.dash && dash.colors && dash.colors[i]) || 'currentColor';
+  const srcColor = (s) => (s === 'Paper' ? col(0) : col(1));
+  const MUTED = 'var(--cds-chart-muted)';
+  const fmt = {
+    pct: (v) => (v == null ? '—' : d3.format('.1f')(v) + '%'),
+    gbs: (v) => (v == null ? '—' : (v >= 1 ? d3.format('.3~g')(v) : d3.format('.2~g')(v)) + ' GB/s'),
+    us: (v) => (v == null ? '—' : d3.format('.3~g')(v) + ' µs'),
+    sci: (v) => (v == null ? '—' : d3.format('.2~e')(v)),
+    bytes: (b) => (b >= 1048576 ? (b / 1048576) + ' MiB' : b >= 1024 ? (b / 1024) + ' KiB' : b + ' B'),
+    int: d3.format(','),
+  };
+  function data(id) {
+    const d = window.dash ? dash.data(id) : { status: 'missing' };
+    return d;
+  }
+  function placeholder(el, ...ids) {
+    const st = ids.map((i) => data(i).status);
+    el.replaceChildren();
+    const p = document.createElement('p');
+    p.className = 'hr-ph';
+    p.textContent = st.includes('error') || st.includes('missing') ? 'Failed to load' : '—';
+    el.append(p);
+  }
+  function rowsOk(...ids) {
+    return ids.every((i) => data(i).status === 'ok');
+  }
+  function svgIn(el, W, H, aria) {
+    el.replaceChildren();
+    const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', aria);
+    return svg;
+  }
+  function textWidth(svg, texts, cls) {
+    let w = 0;
+    const g = svg.append('g').attr('class', cls || 'hr-axis');
+    texts.forEach((t) => {
+      const n = g.append('text').text(t).node();
+      w = Math.max(w, n.getComputedTextLength ? n.getComputedTextLength() : t.length * 7);
+    });
+    g.remove();
+    return w;
+  }
+  function tip(el) {
+    let t = el.querySelector(':scope > .hr-tip');
+    if (!t) {
+      t = document.createElement('div');
+      t.className = 'hr-tip';
+      t.hidden = true;
+      el.append(t);
+    }
+    return t;
+  }
+  function showTip(el, ev, head, lines) {
+    const t = tip(el);
+    const kids = [];
+    if (head) { const h = document.createElement('div'); h.className = 'hr-tip-h'; h.textContent = head; kids.push(h); }
+    lines.forEach(([label, value, color]) => {
+      const r = document.createElement('div'); r.className = 'hr-tip-row';
+      if (color) { const k = document.createElement('i'); k.className = 'hr-tip-key'; k.style.background = color; r.append(k); }
+      const b = document.createElement('b'); b.textContent = value;
+      const s = document.createElement('span'); s.textContent = label;
+      r.append(b, s); kids.push(r);
+    });
+    t.replaceChildren(...kids);
+    t.hidden = false;
+    const box = el.getBoundingClientRect();
+    const tw = t.offsetWidth, th = t.offsetHeight;
+    let x = (ev.clientX ?? box.left + box.width / 2) - box.left + 14;
+    let y = (ev.clientY ?? box.top + 20) - box.top + 14;
+    if (x + tw > box.width) x = Math.max(0, x - tw - 28);
+    if (y + th > box.height) y = Math.max(0, box.height - th);
+    t.style.left = x + 'px';
+    t.style.top = y + 'px';
+  }
+  function hideTip(el) { const t = el.querySelector(':scope > .hr-tip'); if (t) t.hidden = true; }
+
+  /* Horizontal bars, grouped: rows [{label, bars:[{key,value,color,text}]}]. Label sits above its bars. */
+  function hbars(el, o) {
+    const W = Math.max(260, el.clientWidth);
+    const barH = 10, gap = 3, labH = 16, rowGap = 12;
+    const nb = d3.max(o.rows, (r) => r.bars.length) || 1;
+    const rowH = labH + nb * barH + (nb - 1) * gap + rowGap;
+    const mt = 4, mb = 26;
+    const H = mt + o.rows.length * rowH + mb;
+    const svg = svgIn(el, W, H, o.aria);
+    const endW = textWidth(svg, o.rows.flatMap((r) => r.bars.map((b) => b.text)), 'hr-val') + 8;
+    const x = (o.log ? d3.scaleLog() : d3.scaleLinear()).domain(o.domain).range([0, W - endW - 2]);
+    if (!o.log) x.nice();
+    const grid = svg.append('g').attr('class', 'hr-grid').attr('transform', `translate(0,${H - mb})`);
+    const ticks = o.ticks || x.ticks(Math.max(2, Math.floor(W / 90)));
+    grid.call(d3.axisBottom(x).tickValues(ticks).tickSize(-(H - mb - mt)).tickFormat(''));
+    svg.append('g').attr('class', 'hr-axis').attr('transform', `translate(0,${H - mb})`)
+      .call(d3.axisBottom(x).tickValues(ticks).tickFormat(o.tickFormat || x.tickFormat()).tickSizeOuter(0));
+    (o.refs || []).forEach((r) => {
+      svg.append('line').attr('x1', x(r.x)).attr('x2', x(r.x)).attr('y1', mt).attr('y2', H - mb)
+        .style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 1);
+    });
+    const g = svg.append('g').attr('transform', `translate(0,${mt})`);
+    o.rows.forEach((r, i) => {
+      const y0 = i * rowH;
+      g.append('text').attr('class', 'hr-cat').attr('x', 0).attr('y', y0 + 11).text(r.label);
+      r.bars.forEach((b, j) => {
+        if (b.value == null) return;
+        const y = y0 + labH + j * (barH + gap);
+        const x0 = x(o.domain[0]);
+        const w = Math.max(1, x(b.value) - x0);
+        g.append('path').attr('d', roundRight(x0, y, w, barH, 3)).style('fill', b.color);
+        g.append('text').attr('class', 'hr-val').attr('x', x0 + w + 4).attr('y', y + barH - 1).text(b.text);
+      });
+      const hit = g.append('rect').attr('class', 'hr-hit').attr('x', 0).attr('y', y0).attr('width', W).attr('height', rowH - rowGap / 2)
+        .attr('fill', 'transparent').attr('tabindex', 0).attr('aria-label', r.label + ': ' + r.bars.map((b) => b.key + ' ' + b.text).join(', '));
+      const on = (ev) => showTip(el, ev, r.label, r.bars.map((b) => [b.key, b.text, b.color]));
+      hit.on('pointermove', on).on('focus', (ev) => on({ clientX: undefined, clientY: undefined })).on('pointerleave blur', () => hideTip(el));
+    });
+  }
+  function roundRight(x, y, w, h, r) {
+    r = Math.min(r, w, h / 2);
+    return `M${x},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h - r}Q${x + w},${y + h} ${x + w - r},${y + h}H${x}Z`;
+  }
+
+  /* Line chart with crosshair. series [{key,color,width,points:[{x,y}]}]; refs [{y,label}] */
+  function lines(el, o) {
+    const W = Math.max(260, el.clientWidth), H = o.height || 240;
+    const svg = svgIn(el, W, H, o.aria);
+    const y = d3.scaleLinear().domain(o.yDomain).range([H - 28, 8]);
+    if (o.yNice !== false) y.nice();
+    const yt = y.ticks(Math.max(3, Math.floor(H / 50)));
+    const ml = textWidth(svg, yt.map(o.yFormat)) + 10;
+    const allPts = o.series.flatMap((s) => s.points);
+    const endLabels = o.endLabels ? o.series.map((s) => s.endText || '') : [];
+    const mr = (o.endLabels ? textWidth(svg, endLabels, 'hr-val') + 10 : 12);
+    const x = (o.xType === 'log2' ? d3.scaleLog().base(2) : o.xType === 'log' ? d3.scaleLog() : d3.scaleLinear())
+      .domain(o.xDomain).range([ml, W - mr]);
+    svg.append('g').attr('class', 'hr-grid').attr('transform', `translate(${ml},0)`)
+      .call(d3.axisLeft(y).tickValues(yt).tickSize(-(W - ml - mr)).tickFormat(''));
+    svg.append('g').attr('class', 'hr-axis').attr('transform', `translate(${ml},0)`)
+      .call(d3.axisLeft(y).tickValues(yt).tickFormat(o.yFormat).tickSizeOuter(0));
+    let xt = o.xTicks || x.ticks();
+    const xw = textWidth(svg, xt.map(o.xFormat)) + 10;
+    const maxTicks = Math.max(2, Math.floor((W - ml - mr) / xw));
+    if (xt.length > maxTicks) { const step = Math.ceil(xt.length / maxTicks); xt = xt.filter((_, i) => i % step === 0); }
+    svg.append('g').attr('class', 'hr-axis').attr('transform', `translate(0,${H - 28})`)
+      .call(d3.axisBottom(x).tickValues(xt).tickFormat(o.xFormat).tickSizeOuter(0));
+    if (o.xLabel) svg.append('text').attr('class', 'hr-lab').attr('x', W - mr).attr('y', H - 32).attr('text-anchor', 'end').text(o.xLabel);
+    (o.vlines || []).forEach((v) => {
+      svg.append('line').attr('x1', x(v.x)).attr('x2', x(v.x)).attr('y1', 8).attr('y2', H - 28).style('stroke', 'var(--cds-chart-reference)').style('stroke-width', 1);
+      if (v.label) svg.append('text').attr('class', 'hr-lab').attr('x', x(v.x) + 4).attr('y', 18).text(v.label);
+    });
+    (o.refs || []).forEach((r) => {
+      svg.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', y(r.y)).attr('y2', y(r.y)).style('stroke', r.color || 'var(--cds-chart-reference)').style('stroke-width', 1).style('opacity', r.opacity || 1);
+    });
+    const line = d3.line().x((p) => x(p.x)).y((p) => y(p.y)).defined((p) => p.y != null);
+    o.series.forEach((s) => {
+      svg.append('path').datum(s.points).attr('d', line).style('fill', 'none').style('stroke', s.color)
+        .style('stroke-width', s.width || 2).style('stroke-linejoin', 'round').style('stroke-linecap', 'round');
+      svg.append('g').selectAll('circle').data(s.points.filter((p) => p.y != null)).join('circle')
+        .attr('cx', (p) => x(p.x)).attr('cy', (p) => y(p.y)).attr('r', s.dot === false ? 0 : 4)
+        .style('fill', s.color).style('stroke', 'var(--color-bg)').style('stroke-width', 2);
+      if (o.endLabels && s.points.length) {
+        const last = s.points.filter((p) => p.y != null).slice(-1)[0];
+        if (last) svg.append('text').attr('class', 'hr-val').attr('x', x(last.x) + 8).attr('y', y(last.y) + 4).text(s.endText || '');
+      }
+    });
+    // crosshair
+    const xs = Array.from(new Set(allPts.filter((p) => p.y != null).map((p) => p.x))).sort((a, b) => a - b);
+    const cross = svg.append('line').attr('y1', 8).attr('y2', H - 28).style('stroke', 'var(--cds-chart-axis)').style('stroke-width', 1).attr('visibility', 'hidden');
+    const ov = svg.append('rect').attr('x', ml).attr('y', 0).attr('width', Math.max(0, W - ml - mr)).attr('height', H - 28)
+      .attr('fill', 'transparent').attr('tabindex', 0).attr('class', 'hr-hit').attr('aria-label', o.aria);
+    let fi = -1;
+    const show = (xv, ev) => {
+      cross.attr('x1', x(xv)).attr('x2', x(xv)).attr('visibility', 'visible');
+      const lines_ = o.series.map((s) => { const p = s.points.find((q) => q.x === xv && q.y != null); return p ? [s.key, p.text || o.yFormat(p.y), s.color] : null; }).filter(Boolean);
+      showTip(el, ev, (o.tipHead || o.xFormat)(xv), lines_);
+    };
+    ov.on('pointermove', (ev) => {
+      const [px] = d3.pointer(ev, svg.node());
+      const vb = svg.node().viewBox.baseVal, rect = svg.node().getBoundingClientRect();
+      const sx = px * (rect.width ? vb.width / rect.width : 1);
+      const xv = xs.reduce((a, b) => (Math.abs(x(b) - px) < Math.abs(x(a) - px) ? b : a), xs[0]);
+      if (xv !== undefined) show(xv, ev);
+      void sx;
+    }).on('pointerleave blur', () => { cross.attr('visibility', 'hidden'); hideTip(el); })
+      .on('keydown', (ev) => {
+        if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
+          fi = Math.max(0, Math.min(xs.length - 1, fi + (ev.key === 'ArrowRight' ? 1 : -1)));
+          show(xs[fi], {}); ev.preventDefault();
+        }
+      }).on('focus', () => { fi = Math.max(0, fi); show(xs[fi], {}); });
+  }
+
+  /* Stacked horizontal bars: rows [{label, segs:[{key,value,color}], end}] */
+  function stack(el, o) {
+    const W = Math.max(260, el.clientWidth);
+    const barH = 14, labH = 16, rowGap = 12, mt = 4, mb = 26;
+    const rowH = labH + barH + rowGap;
+    const groups = o.groups;
+    const H = mt + groups.reduce((s, g) => s + 18 + g.rows.length * rowH, 0) + mb;
+    const svg = svgIn(el, W, H, o.aria);
+    const endW = textWidth(svg, groups.flatMap((g) => g.rows.map((r) => r.end)), 'hr-val') + 10;
+    const max = d3.max(groups.flatMap((g) => g.rows), (r) => d3.sum(r.segs, (s) => s.value));
+    const x = d3.scaleLinear().domain([0, max]).nice().range([0, W - endW]);
+    const ticks = x.ticks(Math.max(2, Math.floor(W / 90)));
+    svg.append('g').attr('class', 'hr-grid').attr('transform', `translate(0,${H - mb})`).call(d3.axisBottom(x).tickValues(ticks).tickSize(-(H - mb - mt)).tickFormat(''));
+    svg.append('g').attr('class', 'hr-axis').attr('transform', `translate(0,${H - mb})`).call(d3.axisBottom(x).tickValues(ticks).tickFormat((v) => fmt.int(v)).tickSizeOuter(0));
+    let y = mt;
+    groups.forEach((g) => {
+      svg.append('text').attr('class', 'hr-cat').attr('x', 0).attr('y', y + 12).style('font-weight', 'var(--cds-font-weight-medium)').text(g.label);
+      y += 18;
+      g.rows.forEach((r) => {
+        svg.append('text').attr('class', 'hr-lab').attr('x', 0).attr('y', y + 11).text(r.label);
+        let x0 = 0;
+        const yb = y + labH;
+        r.segs.forEach((s, k) => {
+          if (!s.value) return;
+          const w = x(x0 + s.value) - x(x0);
+          const last = k === r.segs.length - 1 || r.segs.slice(k + 1).every((t) => !t.value);
+          const ww = Math.max(0.5, w - (last ? 0 : 2));
+          svg.append('path').attr('d', last ? roundRight(x(x0), yb, ww, barH, 3) : `M${x(x0)},${yb}h${ww}v${barH}h${-ww}Z`).style('fill', s.color);
+          x0 += s.value;
+        });
+        svg.append('text').attr('class', 'hr-val').attr('x', x(x0) + 6).attr('y', yb + barH - 2).text(r.end);
+        const hit = svg.append('rect').attr('class', 'hr-hit').attr('x', 0).attr('y', y).attr('width', W).attr('height', rowH - 4).attr('fill', 'transparent').attr('tabindex', 0)
+          .attr('aria-label', g.label + ' ' + r.label + ': ' + r.end);
+        const on = (ev) => showTip(el, ev, g.label + ' · ' + r.label, r.segs.filter((s) => s.value).map((s) => [s.key, fmt.int(s.value) + ' cycles', s.color]).concat([['overhead', r.end, null]]));
+        hit.on('pointermove', on).on('focus', () => on({})).on('pointerleave blur', () => hideTip(el));
+        y += rowH;
+      });
+    });
+  }
+
+  /* Dot plot on log x: rows [{label, group, paper, ours:{q1,median,q3}}] */
+  function dots(el, o) {
+    const W = Math.max(260, el.clientWidth);
+    const rowH = 22, groupH = 20, mt = 4, mb = 26;
+    const groups = d3.groups(o.rows, (r) => r.group);
+    const H = mt + groups.reduce((s, [, rs]) => s + groupH + rs.length * rowH, 0) + mb;
+    const svg = svgIn(el, W, H, o.aria);
+    const ml = textWidth(svg, o.rows.map((r) => r.label), 'hr-lab') + 12;
+    const x = d3.scaleLog().domain(o.domain).range([ml, W - 10]);
+    const ticks = o.ticks.filter((t, i, a) => i % Math.ceil(a.length / Math.max(2, Math.floor((W - ml) / 46))) === 0);
+    svg.append('g').attr('class', 'hr-grid').attr('transform', `translate(0,${H - mb})`).call(d3.axisBottom(x).tickValues(ticks).tickSize(-(H - mb - mt)).tickFormat(''));
+    svg.append('g').attr('class', 'hr-axis').attr('transform', `translate(0,${H - mb})`).call(d3.axisBottom(x).tickValues(ticks).tickFormat((v) => '1e' + Math.round(Math.log10(v))).tickSizeOuter(0));
+    let y = mt;
+    groups.forEach(([gname, rs]) => {
+      svg.append('text').attr('class', 'hr-cat').attr('x', 0).attr('y', y + 13).style('font-weight', 'var(--cds-font-weight-medium)').text(gname);
+      y += groupH;
+      rs.forEach((r) => {
+        const cy = y + rowH / 2;
+        svg.append('text').attr('class', 'hr-lab').attr('x', ml - 8).attr('y', cy + 4).attr('text-anchor', 'end').text(r.label);
+        if (r.ours) {
+          svg.append('line').attr('x1', x(r.ours.q1)).attr('x2', x(r.ours.q3)).attr('y1', cy).attr('y2', cy).style('stroke', col(1)).style('stroke-width', 2).style('stroke-linecap', 'round');
+          svg.append('circle').attr('cx', x(r.ours.median)).attr('cy', cy).attr('r', 4.5).style('fill', col(1)).style('stroke', 'var(--color-bg)').style('stroke-width', 2);
+        }
+        if (r.paper) {
+          svg.append('circle').attr('cx', x(r.paper.median)).attr('cy', cy).attr('r', 7).style('fill', 'none').style('stroke', col(0)).style('stroke-width', 2);
+        }
+        const hit = svg.append('rect').attr('class', 'hr-hit').attr('x', 0).attr('y', y).attr('width', W).attr('height', rowH).attr('fill', 'transparent').attr('tabindex', 0)
+          .attr('aria-label', `${gname} ${r.label}: median ${r.ours ? fmt.sci(r.ours.median) : '—'}`);
+        const on = (ev) => showTip(el, ev, gname + ' · ' + r.label, [
+          ['paper median', r.paper ? fmt.sci(r.paper.median) : '—', col(0)],
+          ['our median', r.ours ? fmt.sci(r.ours.median) : '—', col(1)],
+          ['our 25–75%', r.ours ? fmt.sci(r.ours.q1) + ' – ' + fmt.sci(r.ours.q3) : '—', null],
+          ['samples', r.ours ? fmt.int(r.ours.n) : '—', null]]);
+        hit.on('pointermove', on).on('focus', () => on({})).on('pointerleave blur', () => hideTip(el));
+        y += rowH;
+      });
+    });
+  }
+
+  /* Table body from rows. cols [{field, num?, fmt?, pill?}], key fields for data-key. */
+  function tbody(el, rows, cols, keys) {
+    el.replaceChildren(...rows.map((r) => {
+      const tr = document.createElement('tr');
+      tr.dataset.key = keys.map((k) => encodeURIComponent(String(r[k] ?? ''))).join(',');
+      cols.forEach((c) => {
+        const td = document.createElement('td');
+        if (c.num) td.className = 'hr-num';
+        const v = r[c.field];
+        if (c.pill) {
+          const s = document.createElement('span'); s.className = 'hr-pill'; s.dataset.k = c.pill(r); s.textContent = v ?? '—'; td.append(s);
+        } else {
+          td.textContent = v == null ? '—' : c.fmt ? c.fmt(v, r) : String(v);
+        }
+        tr.append(td);
+      });
+      return tr;
+    }));
+  }
+  return { col, srcColor, MUTED, fmt, data, placeholder, rowsOk, hbars, lines, stack, dots, tbody };
+})();
+</script>
+
+<script>
+/* Colors for static legend keys follow dash.colors (set once, outside drawings: style only). */
+(function () {
+  const root = document.getElementById('report');
+  if (root && window.dash && dash.colors) dash.colors.forEach((c, i) => root.style.setProperty('--hr-c' + i, c));
+})();
+
+/* Every dataset is one table of the combined results file (hear_results.json). */
+dash.loader('scorecard', { description: 'Takes the scorecard table from the results file.', fn: ({ answer }) => ({ data: answer.tables.scorecard, columns: Object.keys(Object.assign({}, ...answer.tables.scorecard)), meta: answer.meta }) });
+dash.loader('setup', { description: 'Takes the setup table from the results file.', fn: ({ answer }) => ({ data: answer.tables.setup, columns: Object.keys(Object.assign({}, ...answer.tables.setup)), meta: answer.meta }) });
+dash.loader('precision', { description: 'Takes the precision table from the results file.', fn: ({ answer }) => ({ data: answer.tables.precision, columns: Object.keys(Object.assign({}, ...answer.tables.precision)), meta: answer.meta }) });
+dash.loader('prec_match', { description: 'Takes the file-comparison table from the results file.', fn: ({ answer }) => ({ data: answer.tables.prec_match, columns: Object.keys(Object.assign({}, ...answer.tables.prec_match)), meta: answer.meta }) });
+dash.loader('security', { description: 'Takes the security table from the results file.', fn: ({ answer }) => ({ data: answer.tables.security, columns: Object.keys(Object.assign({}, ...answer.tables.security)), meta: answer.meta }) });
+dash.loader('correctness', { description: 'Takes the correctness table from the results file.', fn: ({ answer }) => ({ data: answer.tables.correctness, columns: Object.keys(Object.assign({}, ...answer.tables.correctness)), meta: answer.meta }) });
+dash.loader('breakdown', { description: 'Takes the latency-breakdown table from the results file.', fn: ({ answer }) => ({ data: answer.tables.breakdown, columns: Object.keys(Object.assign({}, ...answer.tables.breakdown)), meta: answer.meta }) });
+dash.loader('encryption', { description: 'Takes the encryption-throughput table from the results file.', fn: ({ answer }) => ({ data: answer.tables.encryption, columns: Object.keys(Object.assign({}, ...answer.tables.encryption)), meta: answer.meta }) });
+dash.loader('blocksize', { description: 'Takes the block-size table from the results file.', fn: ({ answer }) => ({ data: answer.tables.blocksize, columns: Object.keys(Object.assign({}, ...answer.tables.blocksize)), meta: answer.meta }) });
+dash.loader('async_diag', { description: 'Takes the background-progress diagnostic table from the results file.', fn: ({ answer }) => ({ data: answer.tables.async_diag, columns: Object.keys(Object.assign({}, ...answer.tables.async_diag)), meta: answer.meta }) });
+dash.loader('scaling', { description: 'Takes the scaling table from the results file.', fn: ({ answer }) => ({ data: answer.tables.scaling, columns: Object.keys(Object.assign({}, ...answer.tables.scaling)), meta: answer.meta }) });
+dash.loader('dnn', { description: 'Takes the DNN-proxy table from the results file.', fn: ({ answer }) => ({ data: answer.tables.dnn, columns: Object.keys(Object.assign({}, ...answer.tables.dnn)), meta: answer.meta }) });
+dash.loader('compilers', { description: 'Takes the compiler-comparison table from the results file.', fn: ({ answer }) => ({ data: answer.tables.compilers, columns: Object.keys(Object.assign({}, ...answer.tables.compilers)), meta: answer.meta }) });
+
+dash.calc('verdicts', {
+  inputs: ['scorecard'],
+  title: 'Verdict counts',
+  description: 'How many scorecard rows have each verdict.',
+  fn: (scorecard) => [{
+    total: scorecard.length,
+    exact: scorecard.filter((r) => r.status === 'exact').length,
+    reproduced: scorecard.filter((r) => r.status === 'reproduced').length,
+    partial: scorecard.filter((r) => r.status === 'partial' || r.status === 'differs').length,
+  }],
+});
+dash.calc('prec_count', {
+  inputs: ['prec_match'],
+  title: 'Identical precision files',
+  description: 'Number of the six precision result files that are identical to the authors’ files.',
+  fn: (prec_match) => [{ files: prec_match.length, identical: prec_match.filter((r) => r.identical === 'yes').length }],
+});
+
+/* Numbers inside sentences: each is one cell (or one calc value). */
+(function () {
+  const F = HR.fmt;
+  const cell = (name, id, where, field, f) => dash.draw(name, (el) => {
+    const d = dash.data(id);
+    if (d.status !== 'ok') { el.textContent = '—'; return; }
+    const r = d.data.find((row) => Object.entries(where).every(([k, v]) => String(row[k]) === String(v)));
+    el.textContent = r && r[field] != null ? (f ? f(r[field]) : String(r[field])) : '—';
+  });
+  const one = (v) => String(v);   // as stored (already rounded by the export), ASCII minus
+  cell('sum_exact', 'verdicts', {}, 'exact');
+  cell('sum_total', 'verdicts', {}, 'total');
+  cell('sum_repro', 'verdicts', {}, 'reproduced');
+  cell('sum_part', 'verdicts', {}, 'partial');
+  cell('prec_ident', 'prec_count', {}, 'identical');
+  cell('prec_files', 'prec_count', {}, 'files');
+  const encW = { dtype: 'int', prf: 'AES-NI (hand-tuned SSE2)', mode: 'encryption' };
+  cell('enc_ours', 'encryption', { source: 'Ours', ...encW }, 'mean_gbs', (v) => d3.format('.3~g')(v));
+  cell('enc_paper', 'encryption', { source: 'Paper', ...encW }, 'mean_gbs', (v) => d3.format('.3~g')(v));
+  cell('lat_ours', 'breakdown', { source: 'Ours', variant: 'HEAR with AES-NI PRF' }, 'overhead_pct', one);
+  cell('lat_paper', 'breakdown', { source: 'Paper', variant: 'HEAR with AES-NI PRF' }, 'overhead_pct', one);
+  cell('sha_ours', 'breakdown', { source: 'Ours', variant: 'HEAR with SHA1 PRF' }, 'overhead_pct', one);
+  cell('sha_paper', 'breakdown', { source: 'Paper', variant: 'HEAR with SHA1 PRF' }, 'overhead_pct', one);
+  cell('bs_best_ours', 'blocksize', { source: 'Ours', is_best: 'yes' }, 'block_label');
+  cell('bs_pct_ours', 'blocksize', { source: 'Ours', is_best: 'yes' }, 'pct_of_native', one);
+  cell('bs_best_paper', 'blocksize', { source: 'Paper', is_best: 'yes' }, 'block_label');
+  cell('bs_pct_paper', 'blocksize', { source: 'Paper', is_best: 'yes' }, 'pct_of_native', one);
+  cell('bs_sync_ours', 'blocksize', { source: 'Ours', variant: 'Synchronous HEAR' }, 'pct_of_native', one);
+  cell('bs_sync_paper', 'blocksize', { source: 'Paper', variant: 'Synchronous HEAR' }, 'pct_of_native', one);
+  cell('tp_ours40', 'scaling', { source: 'Ours', dtype: 'int', nranks: 40 }, 'best_pct', one);
+  cell('tp_ours80', 'scaling', { source: 'Ours', dtype: 'int', nranks: 80 }, 'best_pct', one);
+  cell('tp_fair40', 'scaling', { source: 'Ours', dtype: 'int', nranks: 40 }, 'best_vs_best_native_pct', one);
+  cell('tp_fair80', 'scaling', { source: 'Ours', dtype: 'int', nranks: 80 }, 'best_vs_best_native_pct', one);
+  cell('ls_ours80', 'scaling', { source: 'Ours', dtype: 'int', nranks: 80 }, 'lat_overhead_pct', one);
+  cell('dnn_resnet', 'dnn', { source: 'Ours', model: 'ResNet-152', nranks: 80, build: 'GCC 9.3' }, 'hear_pct', one);
+  cell('bs_chunk40', 'scaling', { source: 'Ours', dtype: 'int', nranks: 40 }, 'chunked_native_pct', one);
+  cell('as_pipe', 'async_diag', { variant: 'Pipelined HEAR', block_label: '256 KiB' }, 'pct_of_native', one);
+  cell('as_pipe_async', 'async_diag', { variant: 'Pipelined HEAR + progress threads', block_label: '256 KiB' }, 'pct_of_native', one);
+  const gbs = (v) => d3.format('.3~g')(v);
+  const fv = "float · compiler-vectorized (libhear's float path)";
+  cell('cc_gcc9', 'compilers', { compiler: 'GCC 9.3', variant: fv }, 'enc_gbs', gbs);
+  cell('cc_clang', 'compilers', { compiler: 'clang 13', variant: fv }, 'enc_gbs', gbs);
+  cell('dnn_resnet_p', 'dnn', { source: 'Paper', model: 'ResNet-152' }, 'hear_pct', one);
+})();
+
+/* Tables */
+dash.draw('score_rows', (el) => {
+  if (!HR.rowsOk('scorecard')) { el.replaceChildren(); return; }
+  const kind = (r) => (r.status === 'exact' || r.status === 'reproduced' ? 'ok' : r.status === 'pending' ? '' : r.status === 'differs' ? 'bad' : 'warn');
+  HR.tbody(el, dash.data('scorecard').data, [{ field: 'result' }, { field: 'where' }, { field: 'paper' }, { field: 'ours' }, { field: 'verdict', pill: kind }], ['result']);
+});
+dash.draw('setup_rows', (el) => {
+  if (!HR.rowsOk('setup')) { el.replaceChildren(); return; }
+  HR.tbody(el, dash.data('setup').data, [{ field: 'aspect' }, { field: 'paper' }, { field: 'ours' }], ['aspect']);
+});
+dash.draw('prec_rows', (el) => {
+  if (!HR.rowsOk('prec_match')) { el.replaceChildren(); return; }
+  HR.tbody(el, dash.data('prec_match').data, [{ field: 'op' }, { field: 'precision' }, { field: 'rows_paper', num: true, fmt: HR.fmt.int }, { field: 'rows_ours', num: true, fmt: HR.fmt.int }, { field: 'differing_rows', num: true, fmt: HR.fmt.int }, { field: 'identical', pill: (r) => (r.identical === 'yes' ? 'ok' : 'warn') }], ['op', 'precision']);
+});
+dash.draw('sec_rows', (el) => {
+  if (!HR.rowsOk('security')) { el.replaceChildren(); return; }
+  HR.tbody(el, dash.data('security').data, [{ field: 'source' }, { field: 'max_label', num: true }, { field: 'avg_label', num: true }, { field: 'min_label', num: true }, { field: 'uniform_label', num: true }, { field: 'status', pill: (r) => (r.status === 'matches paper' ? 'ok' : r.status === 'published' ? '' : 'warn') }], ['source']);
+});
+dash.draw('corr_rows', (el) => {
+  if (!HR.rowsOk('correctness')) { el.replaceChildren(); return; }
+  HR.tbody(el, dash.data('correctness').data, [{ field: 'check' }, { field: 'source' }, { field: 'scope' }, { field: 'result' }, { field: 'passed', pill: (r) => (r.passed === 'yes' ? 'ok' : 'bad') }], ['check', 'scope']);
+});
+dash.draw('enc_rows', (el) => {
+  if (!HR.rowsOk('encryption')) { el.replaceChildren(); return; }
+  const rows = dash.data('encryption').data.slice().sort((a, b) => d3.ascending(a.dtype, b.dtype) || d3.ascending(a.order, b.order) || d3.ascending(a.mode, b.mode) || d3.ascending(a.source, b.source));
+  HR.tbody(el, rows, [{ field: 'source' }, { field: 'dtype' }, { field: 'prf' }, { field: 'mode' }, { field: 'mean_gbs', num: true }, { field: 'std_gbs', num: true }], ['source', 'dtype', 'prf', 'mode']);
+});
+dash.draw('lat_rows', (el) => {
+  if (!HR.rowsOk('breakdown')) { el.replaceChildren(); return; }
+  HR.tbody(el, dash.data('breakdown').data, [{ field: 'source' }, { field: 'variant' }, { field: 'comm', num: true, fmt: HR.fmt.int }, { field: 'encrypt', num: true, fmt: HR.fmt.int }, { field: 'decrypt', num: true, fmt: HR.fmt.int }, { field: 'mem_alloc', num: true, fmt: HR.fmt.int }, { field: 'mem_free', num: true, fmt: HR.fmt.int }, { field: 'overhead_pct', num: true }, { field: 'latency_us', num: true }], ['source', 'variant']);
+});
+dash.draw('bs_rows', (el) => {
+  if (!HR.rowsOk('blocksize')) { el.replaceChildren(); return; }
+  HR.tbody(el, dash.data('blocksize').data, [{ field: 'source' }, { field: 'variant' }, { field: 'block_label' }, { field: 'pct_of_native', num: true }, { field: 'tput_rank_gbs', num: true }], ['source', 'variant', 'block_label']);
+});
+dash.draw('tp_rows', (el) => {
+  if (!HR.rowsOk('scaling')) { el.replaceChildren(); return; }
+  HR.tbody(el, dash.data('scaling').data, [{ field: 'source' }, { field: 'dtype' }, { field: 'nranks', num: true }, { field: 'nodes', num: true }, { field: 'ppn', num: true }, { field: 'native_gbs_node', num: true }, { field: 'hear_gbs_node', num: true }, { field: 'hear_pct', num: true }, { field: 'sync_pct', num: true }, { field: 'best_block_label' }, { field: 'best_pct', num: true }, { field: 'chunked_native_pct', num: true }, { field: 'best_vs_best_native_pct', num: true }], ['source', 'dtype', 'nranks']);
+});
+dash.draw('ls_rows', (el) => {
+  if (!HR.rowsOk('scaling')) { el.replaceChildren(); return; }
+  HR.tbody(el, dash.data('scaling').data, [{ field: 'source' }, { field: 'dtype' }, { field: 'nranks', num: true }, { field: 'nodes', num: true }, { field: 'lat_native_us', num: true }, { field: 'lat_hear_us', num: true }, { field: 'lat_overhead_pct', num: true }], ['source', 'dtype', 'nranks']);
+});
+dash.draw('dnn_rows', (el) => {
+  if (!HR.rowsOk('dnn')) { el.replaceChildren(); return; }
+  HR.tbody(el, dash.data('dnn').data, [{ field: 'source' }, { field: 'model' }, { field: 'nranks', num: true }, { field: 'build' }, { field: 'native_s', num: true }, { field: 'hear_s', num: true }, { field: 'hear_pct', num: true }], ['source', 'model', 'nranks', 'build']);
+});
+
+/* Charts */
+function precChart(op) {
+  return (el) => {
+    if (!HR.rowsOk('precision')) return HR.placeholder(el, 'precision');
+    const all = dash.data('precision').data.filter((r) => r.op === op);
+    const order = ['Native', 'HEAR γ=2', 'HEAR γ=1', 'HEAR γ=0', 'HEAR'];
+    const keys = Array.from(new Set(all.map((r) => r.precision + '|' + r.variant)));
+    const rows = keys.map((k) => {
+      const [p, v] = k.split('|');
+      const pr = all.find((r) => r.precision === p && r.variant === v && r.source === 'Paper');
+      const ou = all.find((r) => r.precision === p && r.variant === v && r.source === 'Ours');
+      return { group: p, label: v, paper: pr, ours: ou };
+    }).sort((a, b) => d3.ascending(['FP16', 'FP32', 'FP64'].indexOf(a.group), ['FP16', 'FP32', 'FP64'].indexOf(b.group)) || d3.ascending(order.indexOf(a.label), order.indexOf(b.label)));
+    const vals = all.flatMap((r) => [r.q1, r.q3, r.median]).filter((v) => v > 0);
+    const lo = Math.pow(10, Math.floor(Math.log10(d3.min(vals)))), hi = Math.pow(10, Math.ceil(Math.log10(d3.max(vals))));
+    const ticks = d3.range(Math.log10(lo), Math.log10(hi) + 1).map((e) => Math.pow(10, e));
+    HR.dots(el, { rows, domain: [lo, hi], ticks, aria: `Median relative error for ${op}, paper and ours, by float type and HEAR variant` });
+  };
+}
+dash.draw('prec_add', precChart('addition'));
+dash.draw('prec_mul', precChart('multiplication'));
+
+function encChart(mode) {
+  return (el) => {
+    if (!HR.rowsOk('encryption')) return HR.placeholder(el, 'encryption');
+    const all = dash.data('encryption').data.filter((r) => r.mode === mode);
+    const keys = Array.from(new Set(all.map((r) => r.dtype + '|' + r.prf + '|' + r.order)))
+      .sort((a, b) => d3.ascending(a.split('|')[0] === 'int' ? 0 : 1, b.split('|')[0] === 'int' ? 0 : 1) || d3.ascending(+a.split('|')[2], +b.split('|')[2]));
+    const rows = keys.map((k) => {
+      const [dt, prf] = k.split('|');
+      const get = (s) => all.find((r) => r.dtype === dt && r.prf === prf && r.source === s);
+      return { label: (dt === 'int' ? 'int · ' : 'float · ') + prf, bars: ['Paper', 'Ours'].map((s) => { const r = get(s); return { key: s, value: r ? r.mean_gbs : null, color: HR.srcColor(s), text: r ? HR.fmt.gbs(r.mean_gbs) : '—' }; }) };
+    });
+    const vals = all.map((r) => r.mean_gbs).filter((v) => v > 0);
+    const lo = Math.pow(10, Math.floor(Math.log10(d3.min(vals)))), hi = Math.pow(10, Math.ceil(Math.log10(d3.max(vals))));
+    HR.hbars(el, { rows, log: true, domain: [lo, hi], ticks: d3.range(Math.log10(lo), Math.log10(hi) + 1).map((e) => Math.pow(10, e)), tickFormat: (v) => d3.format('~g')(v), aria: `Single-core ${mode} throughput in GB/s by PRF variant, paper and ours` });
+  };
+}
+dash.draw('enc_chart', encChart('encryption'));
+dash.draw('dec_chart', encChart('decryption'));
+
+dash.draw('lat_chart', (el) => {
+  if (!HR.rowsOk('breakdown')) return HR.placeholder(el, 'breakdown');
+  const rows = dash.data('breakdown').data;
+  const segs = (r) => [
+    { key: 'communication', value: r.comm, color: HR.MUTED },
+    { key: 'memory alloc', value: r.mem_alloc, color: HR.col(2) },
+    { key: 'encrypt', value: r.encrypt, color: HR.col(3) },
+    { key: 'decrypt', value: r.decrypt, color: HR.col(4) },
+    { key: 'memory free', value: r.mem_free, color: HR.col(5) }];
+  const order = ['Native MPI', 'HEAR with SHA1 PRF', 'HEAR with AES-NI PRF'];
+  const groups = ['Paper', 'Ours'].map((s) => ({
+    label: s === 'Paper' ? 'Paper (Cray MPICH, Aries)' : 'Ours (Intel MPI, QDR InfiniBand)',
+    rows: rows.filter((r) => r.source === s).sort((a, b) => order.indexOf(a.variant) - order.indexOf(b.variant))
+      .map((r) => ({ label: r.variant, segs: segs(r), end: r.variant === 'Native MPI' ? HR.fmt.int(r.total) + ' cycles' : '+' + d3.format('.1f')(r.overhead_pct) + '%' })),
+  })).filter((g) => g.rows.length);
+  HR.stack(el, { groups, aria: 'Critical-path cycles of a 16-byte Allreduce split into communication, memory and encryption stages, paper and ours' });
+});
+
+dash.draw('bs_chart', (el) => {
+  if (!HR.rowsOk('blocksize')) return HR.placeholder(el, 'blocksize');
+  const rows = dash.data('blocksize').data;
+  const series = ['Paper', 'Ours'].map((s) => ({ key: s + ', pipelined', color: HR.srcColor(s), points: rows.filter((r) => r.source === s && r.block_bytes).map((r) => ({ x: r.block_bytes, y: r.pct_of_native, text: d3.format('.1f')(r.pct_of_native) + '%' })).sort((a, b) => a.x - b.x) })).filter((s) => s.points.length);
+  const refs = rows.filter((r) => r.variant === 'Synchronous HEAR').map((r) => ({ y: r.pct_of_native, color: HR.srcColor(r.source), opacity: 0.45 }));
+  const xs = rows.filter((r) => r.block_bytes).map((r) => r.block_bytes);
+  const ys = rows.map((r) => r.pct_of_native);
+  HR.lines(el, {
+    series, refs, height: 280, xType: 'log2', xDomain: [d3.min(xs), d3.max(xs)], xTicks: Array.from(new Set(xs)).sort((a, b) => a - b), xFormat: HR.fmt.bytes, xLabel: 'block size',
+    yDomain: [0, Math.max(100, d3.max(ys))], yFormat: (v) => v + '%',
+    aria: 'HEAR throughput as a percentage of native versus pipelining block size, paper and ours, with synchronous HEAR as reference lines',
+  });
+});
+
+function scalingRows(src) {
+  return dash.data('scaling').data.filter((r) => r.source === src && r.dtype === 'int').sort((a, b) => a.nranks - b.nranks);
+}
+const P2 = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
+dash.draw('tp_pct', (el) => {
+  if (!HR.rowsOk('scaling')) return HR.placeholder(el, 'scaling');
+  const p = scalingRows('Paper'), o = scalingRows('Ours');
+  const series = [
+    { key: 'Paper, vs default MPI (256 KiB blocks)', color: HR.col(0), points: p.map((r) => ({ x: r.nranks, y: r.hear_pct })) },
+    { key: 'Ours, vs default MPI', color: HR.col(1), points: o.map((r) => ({ x: r.nranks, y: r.best_pct, text: r.best_pct == null ? '—' : d3.format('.1f')(r.best_pct) + '% (' + (r.best_block_label || '') + ')' })) },
+    { key: 'Ours, vs MPI chunked like HEAR', color: HR.col(2), points: o.map((r) => ({ x: r.nranks, y: r.best_vs_best_native_pct })) },
+  ].filter((s) => s.points.some((q) => q.y != null));
+  const xs = p.concat(o).map((r) => r.nranks);
+  HR.lines(el, {
+    series, height: 260, xType: 'log2', xDomain: [2, Math.max(80, d3.max(xs))], xTicks: P2.filter((t) => t <= d3.max(xs)), xFormat: (v) => String(v), tipHead: (v) => v + ' ranks', xLabel: 'MPI ranks',
+    yDomain: [0, Math.max(100, d3.max(p.concat(o).flatMap((r) => [r.hear_pct, r.best_pct, r.best_vs_best_native_pct]).filter((v) => v != null)) || 100)],
+    yFormat: (v) => v + '%', refs: [{ y: 100 }],
+    aria: 'HEAR throughput as a percentage of native versus number of ranks, paper and ours',
+  });
+});
+function absChart(src, field, hearField, unit, color, aria) {
+  return (el) => {
+    if (!HR.rowsOk('scaling')) return HR.placeholder(el, 'scaling');
+    const r = scalingRows(src);
+    if (!r.length) return HR.placeholder(el, 'scaling');
+    const f = unit === 'GB/s' ? (v) => d3.format('.3~g')(v) + ' GB/s' : (v) => d3.format('.3~g')(v) + ' µs';
+    const series = [
+      { key: 'native', color: HR.MUTED, points: r.map((q) => ({ x: q.nranks, y: q[field], text: q[field] == null ? '—' : f(q[field]) })) },
+      { key: 'HEAR', color, points: r.map((q) => ({ x: q.nranks, y: q[hearField], text: q[hearField] == null ? '—' : f(q[hearField]) })) }];
+    const ys = r.flatMap((q) => [q[field], q[hearField]]).filter((v) => v != null);
+    const xs = r.map((q) => q.nranks);
+    HR.lines(el, { series, height: 220, xType: 'log2', xDomain: [d3.min(xs), d3.max(xs)], xTicks: P2.filter((t) => t >= d3.min(xs) && t <= d3.max(xs)), xFormat: (v) => String(v), tipHead: (v) => v + ' ranks', xLabel: 'MPI ranks', yDomain: [0, d3.max(ys) * 1.1], yFormat: (v) => d3.format('~g')(v), aria });
+  };
+}
+dash.draw('tp_abs_paper', absChart('Paper', 'native_gbs_node', 'hear_gbs_node', 'GB/s', HR.col(0), 'Paper: native and HEAR throughput per node versus ranks'));
+dash.draw('tp_abs_ours', absChart('Ours', 'native_gbs_node', 'hear_best_gbs_node', 'GB/s', HR.col(1), 'Ours: native and HEAR throughput per node versus ranks'));
+dash.draw('ls_abs_paper', absChart('Paper', 'lat_native_us', 'lat_hear_us', 'µs', HR.col(0), 'Paper: native and HEAR 16-byte latency versus ranks'));
+dash.draw('ls_abs_ours', absChart('Ours', 'lat_native_us', 'lat_hear_us', 'µs', HR.col(1), 'Ours: native and HEAR 16-byte latency versus ranks'));
+dash.draw('ls_pct', (el) => {
+  if (!HR.rowsOk('scaling')) return HR.placeholder(el, 'scaling');
+  const p = scalingRows('Paper'), o = scalingRows('Ours');
+  const series = [
+    { key: 'Paper', color: HR.col(0), points: p.map((r) => ({ x: r.nranks, y: r.lat_overhead_pct })) },
+    { key: 'Ours', color: HR.col(1), points: o.map((r) => ({ x: r.nranks, y: r.lat_overhead_pct })) }].filter((s) => s.points.some((q) => q.y != null));
+  const ys = p.concat(o).map((r) => r.lat_overhead_pct).filter((v) => v != null);
+  const xs = p.concat(o).map((r) => r.nranks);
+  HR.lines(el, {
+    series, height: 240, xType: 'log2', xDomain: [2, Math.max(80, d3.max(xs))], xTicks: P2.filter((t) => t <= d3.max(xs)), xFormat: (v) => String(v), tipHead: (v) => v + ' ranks', xLabel: 'MPI ranks',
+    yDomain: [Math.min(0, d3.min(ys)), Math.max(10, d3.max(ys))], yFormat: (v) => v + '%', refs: [{ y: 0 }],
+    aria: 'HEAR latency overhead for 16-byte Allreduce versus ranks, paper and ours',
+  });
+});
+
+dash.draw('cc_chart', (el) => {
+  if (!HR.rowsOk('compilers')) return HR.placeholder(el, 'compilers');
+  const rows = dash.data('compilers').data;
+  if (!rows.length) { el.replaceChildren(); const p = document.createElement('p'); p.className = 'hr-ph'; p.textContent = 'No compiler comparison yet.'; el.append(p); return; }
+  const comps = [['clang 13', HR.col(0), 'Paper, clang 13'], ['GCC 4.8.5', HR.col(1), 'GCC 4.8.5'], ['GCC 9.3', HR.col(2), 'GCC 9.3'], ['Intel icpc 18', HR.col(3), 'Intel icpc 18']];
+  const variants = Array.from(new Set(rows.map((r) => r.variant + '|' + r.order))).sort((a, b) => +a.split('|')[1] - +b.split('|')[1]).map((v) => v.split('|')[0]);
+  const data = variants.map((v) => ({
+    label: v,
+    bars: comps.map(([c, color, key]) => { const r = rows.find((q) => q.variant === v && q.compiler === c); return { key, value: r ? r.enc_gbs : null, color, text: r && r.enc_gbs != null ? HR.fmt.gbs(r.enc_gbs) : '—' }; }),
+  }));
+  const vals = rows.map((r) => r.enc_gbs).filter((v) => v > 0);
+  const lo = Math.pow(10, Math.floor(Math.log10(d3.min(vals)))), hi = Math.pow(10, Math.ceil(Math.log10(d3.max(vals))));
+  HR.hbars(el, { rows: data, log: true, domain: [lo, hi], ticks: d3.range(Math.log10(lo), Math.log10(hi) + 1).map((e) => Math.pow(10, e)), tickFormat: (v) => d3.format('~g')(v), aria: 'Single-core encryption throughput of libhear AES-NI routines built with clang 13 (paper), GCC 4.8.5, GCC 9.3 and Intel icpc 18' });
+});
+
+dash.draw('async_chart', (el) => {
+  if (!HR.rowsOk('async_diag')) return HR.placeholder(el, 'async_diag');
+  const rows = dash.data('async_diag').data;
+  if (!rows.length) {
+    el.replaceChildren();
+    const p = document.createElement('p'); p.className = 'hr-ph'; p.textContent = 'Not run yet: it is the last step of the 4-node job.'; el.append(p);
+    return;
+  }
+  const get = (v, b) => rows.find((r) => r.variant === v && r.block_label === b);
+  const items = [['Native MPI', 'Native MPI', 'Native MPI + progress threads', 'whole message'], ['Synchronous HEAR', 'Synchronous HEAR', null, 'whole message']]
+    .concat(['256 KiB', '1 MiB', '4 MiB'].map((b) => ['Pipelined HEAR, ' + b + ' blocks', 'Pipelined HEAR', 'Pipelined HEAR + progress threads', b]));
+  const bar = (key, r, color) => ({ key, value: r ? r.pct_of_native : null, color, text: r ? d3.format('.1f')(r.pct_of_native) + '%' : '—' });
+  const data = items.map(([label, v0, v1, b]) => ({ label, bars: [bar('Intel MPI default', get(v0, b), HR.col(1))].concat(v1 ? [bar('with progress threads', get(v1, b), HR.col(2))] : []) }));
+  const max = d3.max(rows, (r) => r.pct_of_native) || 100;
+  HR.hbars(el, { rows: data, domain: [0, Math.max(110, max * 1.05)], tickFormat: (v) => v + '%', refs: [{ x: 100 }], aria: 'Throughput as a percentage of native for native MPI, synchronous HEAR and pipelined HEAR, with and without Intel MPI progress threads' });
+});
+
+dash.draw('dnn_chart', (el) => {
+  if (!HR.rowsOk('dnn')) return HR.placeholder(el, 'dnn');
+  const rows = dash.data('dnn').data;
+  const models = ['ResNet-152', 'DLRM', 'CosmoFlow', 'GPT-3'];
+  const pick = (s, m) => rows.filter((r) => r.source === s && r.model === m && (s === 'Paper' || r.build === 'GCC 9.3')).sort((a, b) => b.nranks - a.nranks)[0];
+  const data = models.map((m) => ({
+    label: m, bars: ['Paper', 'Ours'].map((s) => { const r = pick(s, m); return { key: s + (r ? ' (' + r.nranks + ' ranks)' : ''), value: r ? r.hear_pct : null, color: HR.srcColor(s), text: r ? d3.format('.1f')(r.hear_pct) + '%' : (s === 'Ours' && m === 'GPT-3' ? 'not run' : '—') }; }),
+  }));
+  const vals = rows.map((r) => r.hear_pct);
+  HR.hbars(el, { rows: data, domain: [0, Math.max(140, d3.max(vals) * 1.05)], tickFormat: (v) => v + '%', refs: [{ x: 100 }], aria: 'Training iteration time with HEAR as a percentage of native, by model, paper and ours' });
+});
+</script>

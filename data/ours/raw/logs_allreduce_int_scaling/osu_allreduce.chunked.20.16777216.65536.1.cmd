@@ -1,0 +1,1 @@
+2026-11-20 02:16:25 mpirun -n 20 -ppn 10 -hosts compute01.local,compute02.local -genv LD_PRELOAD /home/<user>/BT2024190/hear_repro/build/lib/libchunk.so -genv CHUNK_BLOCK_SIZE 65536 /home/<user>/BT2024190/hear_repro/build/bin/osu_allreduce_int -m 16777216:16777216 -f -i 300

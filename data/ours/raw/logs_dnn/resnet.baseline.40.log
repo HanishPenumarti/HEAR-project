@@ -1,0 +1,2 @@
+Rank = 0, world_size = 40, data_shards = 40, total_params = 60192808, global_batch_size = 5120. 
+ResNet-152 with pure data parallelism runtime for each iteration = 10.912980 s. 

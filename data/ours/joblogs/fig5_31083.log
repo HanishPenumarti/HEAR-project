@@ -1,0 +1,8 @@
+== 2026-11-19 23:55:33 job 31083.master.local on compute04.local no_turbo=1
+2026-11-20 00:36:09 int/naive (2M items): encryption 0.010651 GB/s; decryption 0.0210318 GB/s; 
+2026-11-20 00:46:15 int/sha1sse2 (2M items): encryption 0.0426326 GB/s; decryption 0.0856063 GB/s; 
+/home/<user>/BT2024190/hear_repro/jobs/fig5.sh: line 11: 178617 Aborted                 taskset -c 0 "$BIN/encr_perf_test" 1000 $n 1 $dtype sum $func > "$D/single_core_encr_tput.$dtype.sum.$func.$n.log" 2>&1
+/home/<user>/BT2024190/hear_repro/jobs/fig5.sh: line 11: 178618 Aborted                 taskset -c 0 "$BIN/encr_perf_test" 1000 $n 1 $dtype sum $func > "$D/single_core_encr_tput.$dtype.sum.$func.$n.log" 2>&1
+2026-11-20 00:51:20 int/sha1avx2 (2M items): encryption 0.0845339 GB/s; decryption 0.170899 GB/s; 
+2026-11-20 00:51:23 int/aesni (2M items): encryption 9.42256 GB/s; decryption 12.9916 GB/s; 
+2026-11-20 00:52:06 int/aesni_unroll (2M items): encryption 0.710917 GB/s; decryption 0.921219 GB/s; 

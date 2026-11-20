@@ -1,0 +1,91 @@
+== 2026-11-20 01:33:43 job 31084.master.local on compute01.local compute02.local compute03.local compute04.local fabric=shm:dapl
+== Fig 7/8 node scaling: 80 ranks (4 nodes x 20), int sum, 2 trials (+ synchronous HEAR)
+01:33:54 rc=0 osu_allreduce.baseline.80.8.1.log                          8                      55.18             49.42             57.10      100000
+01:34:06 rc=0 osu_allreduce.baseline.80.8.2.log                          8                      51.75             46.11             53.70      100000
+01:34:16 rc=0 osu_allreduce.baseline.80.16.1.log                         16                     48.71             43.56             50.60      100000
+01:34:26 rc=0 osu_allreduce.baseline.80.16.2.log                         16                     45.73             42.44             46.91      100000
+01:36:03 rc=0 osu_allreduce.baseline.80.16777216.1.log                   16777216           259607.95         226135.92         299120.51         300
+01:37:56 rc=0 osu_allreduce.baseline.80.16777216.2.log                   16777216           312969.80         273538.59         350176.32         300
+01:38:06 rc=0 osu_allreduce.optimized.80.8.1.log                         8                      46.30             40.21             48.04      100000
+01:38:15 rc=0 osu_allreduce.optimized.80.8.2.log                         8                      42.91             37.65             45.37      100000
+01:38:24 rc=0 osu_allreduce.optimized.80.16.1.log                        16                     35.04             31.88             36.49      100000
+01:38:35 rc=0 osu_allreduce.optimized.80.16.2.log                        16                     54.81             48.94             56.73      100000
+01:40:36 rc=0 osu_allreduce.optimized.80.16777216.16384.1.log            16777216           384297.65         383806.17         384791.67         300
+01:42:47 rc=0 osu_allreduce.optimized.80.16777216.16384.2.log            16777216           411797.79         411661.82         412331.34         300
+01:44:35 rc=0 osu_allreduce.optimized.80.16777216.65536.1.log            16777216           335509.24         335042.29         336399.62         300
+01:46:04 rc=0 osu_allreduce.optimized.80.16777216.65536.2.log            16777216           278483.76         278213.78         279334.74         300
+01:47:18 rc=0 osu_allreduce.optimized.80.16777216.262144.1.log           16777216           218784.88         217502.11         220403.95         300
+01:48:37 rc=0 osu_allreduce.optimized.80.16777216.262144.2.log           16777216           241141.90         240016.17         242832.51         300
+01:50:12 rc=0 osu_allreduce.optimized.80.16777216.1048576.1.log          16777216           263773.74         259107.09         271861.85         300
+01:51:37 rc=0 osu_allreduce.optimized.80.16777216.1048576.2.log          16777216           238865.45         234429.54         245193.79         300
+01:53:15 rc=0 osu_allreduce.sync.80.16777216.1.log                       16777216           251965.09         223423.65         281936.01         300
+01:55:14 rc=0 osu_allreduce.sync.80.16777216.2.log                       16777216           308558.29         267249.11         348000.25         300
+== supplementary: float sum at 80 ranks, 1 trial (GCC 4.8.5 build, as P1's float points)
+01:55:23 rc=0 osu_allreduce.baseline.80.8.1.log                          8                      47.40             38.29             48.97      100000
+01:55:33 rc=0 osu_allreduce.baseline.80.16.1.log                         16                     30.56             28.02             38.30      100000
+01:57:13 rc=0 osu_allreduce.baseline.80.16777216.1.log                   16777216           270304.74         236157.25         304606.03         300
+01:57:24 rc=0 osu_allreduce.optimized.80.8.1.log                         8                      47.78             43.50             49.27      100000
+01:57:33 rc=0 osu_allreduce.optimized.80.16.1.log                        16                     48.91             44.39             50.70      100000
+02:02:14 rc=0 osu_allreduce.optimized.80.16777216.65536.1.log            16777216           895097.24         894510.30         895962.32         300
+02:06:00 rc=0 osu_allreduce.optimized.80.16777216.262144.1.log           16777216           696447.85         693858.94         700073.54         300
+== control: native MPI chunked like HEAR's pipeline (no encryption), 80 ranks
+02:07:44 rc=0 osu_allreduce.chunked.80.16777216.65536.1.log              16777216           326490.32         326169.64         327418.44         300
+02:09:23 rc=0 osu_allreduce.chunked.80.16777216.65536.2.log              16777216           309294.84         308817.15         310009.34         300
+02:10:18 rc=0 osu_allreduce.chunked.80.16777216.262144.1.log             16777216           163957.43         162893.40         165553.98         300
+02:11:20 rc=0 osu_allreduce.chunked.80.16777216.262144.2.log             16777216           185723.02         183941.03         187671.38         300
+02:12:21 rc=0 osu_allreduce.chunked.80.16777216.1048576.1.log            16777216           174607.00         171304.98         179670.07         300
+02:13:37 rc=0 osu_allreduce.chunked.80.16777216.1048576.2.log            16777216           211797.31         208058.91         218178.41         300
+== synchronous HEAR + chunked-native control at the 2-node points (P1 measured only pipelined HEAR)
+02:13:44 rc=0 osu_allreduce.sync.2.16777216.1.log                        16777216            20510.56          20431.95          20589.16         300
+02:13:51 rc=0 osu_allreduce.sync.2.16777216.2.log                        16777216            20552.44          20479.28          20625.59         300
+02:13:57 rc=0 osu_allreduce.chunked.2.16777216.65536.1.log               16777216            16389.14          16388.90          16389.38         300
+02:14:02 rc=0 osu_allreduce.chunked.2.16777216.262144.1.log              16777216            13681.04          13674.24          13687.83         300
+02:14:06 rc=0 osu_allreduce.chunked.2.16777216.1048576.1.log             16777216            12368.08          12358.09          12378.06         300
+02:14:18 rc=0 osu_allreduce.sync.4.16777216.1.log                        16777216            34100.61          32659.83          35524.68         300
+02:14:29 rc=0 osu_allreduce.sync.4.16777216.2.log                        16777216            33750.02          31954.60          35705.96         300
+02:14:37 rc=0 osu_allreduce.chunked.4.16777216.65536.1.log               16777216            21873.71          21873.30          21874.21         300
+02:14:45 rc=0 osu_allreduce.chunked.4.16777216.262144.1.log              16777216            26763.80          26756.20          26771.54         300
+02:14:53 rc=0 osu_allreduce.chunked.4.16777216.1048576.1.log             16777216            24595.85          24592.31          24599.51         300
+02:15:06 rc=0 osu_allreduce.sync.8.16777216.1.log                        16777216            36042.77          34833.90          37199.46         300
+02:15:18 rc=0 osu_allreduce.sync.8.16777216.2.log                        16777216            36213.21          34949.83          37358.62         300
+02:15:27 rc=0 osu_allreduce.chunked.8.16777216.65536.1.log               16777216            27135.01          27129.72          27143.75         300
+02:15:36 rc=0 osu_allreduce.chunked.8.16777216.262144.1.log              16777216            25781.09          25763.71          25796.29         300
+02:15:45 rc=0 osu_allreduce.chunked.8.16777216.1048576.1.log             16777216            27224.47          26942.33          27519.71         300
+02:16:05 rc=0 osu_allreduce.sync.20.16777216.1.log                       16777216            54363.75          48665.13          62210.79         300
+02:16:25 rc=0 osu_allreduce.sync.20.16777216.2.log                       16777216            54871.06          49322.07          62381.89         300
+02:16:40 rc=0 osu_allreduce.chunked.20.16777216.65536.1.log              16777216            44577.26          44522.01          44684.34         300
+02:16:54 rc=0 osu_allreduce.chunked.20.16777216.262144.1.log             16777216            42428.37          42139.19          42847.19         300
+02:17:10 rc=0 osu_allreduce.chunked.20.16777216.1048576.1.log            16777216            46652.04          45599.68          48044.98         300
+02:18:48 rc=0 osu_allreduce.sync.40.16777216.1.log                       16777216           275845.30         258764.93         295225.35         300
+02:20:19 rc=0 osu_allreduce.sync.40.16777216.2.log                       16777216           253173.12         238878.17         268746.40         300
+02:21:49 rc=0 osu_allreduce.chunked.40.16777216.65536.1.log              16777216           281352.34         280589.02         282316.29         300
+02:22:36 rc=0 osu_allreduce.chunked.40.16777216.262144.1.log             16777216           139372.37         138791.22         140617.53         300
+02:23:28 rc=0 osu_allreduce.chunked.40.16777216.1048576.1.log            16777216           146783.25         144473.79         151361.59         300
+== 2026-11-20 02:23:28 Fig 9: DNN proxies at 80 ranks, native + primary build build_gcc9 (7815 s left)
+02:26:40 rc=0 cosmoflow.baseline.80.log                                  
+02:32:04 rc=0 cosmoflow.hear-gcc9.80.log                                 
+CosmoFlow with a hybrid of model and data parallelism runtime for each iteration = 1.210740 s.
+CosmoFlow with a hybrid of model and data parallelism runtime for each iteration = 2.135170 s.
+02:33:04 rc=0 dlrm.baseline.80.log                                       
+02:34:53 rc=0 dlrm.hear-gcc9.80.log                                      
+MoEs: Rank = 0, world_size = 80, global batch = 2048, DLRM runtime per iteration = 0.281130 s
+MoEs: Rank = 0, world_size = 80, global batch = 2048, DLRM runtime per iteration = 0.525276 s
+03:14:53 rc=124 resnet.baseline.80.log                                     
+03:54:53 rc=124 resnet.hear-gcc9.80.log                                    
+== 2026-11-20 03:54:53 diagnostic: background progress for pipelining, 2 nodes x 10 ranks, 16 MiB int (2330 s left)
+03:55:11 rc=0 async.baseline.1.log                                       16777216            47405.20          42558.04          52376.23         300
+03:55:30 rc=0 async.baseline_async.1.log                                 16777216            54167.96          50326.86          59610.57         300
+03:55:52 rc=0 async.sync.1.log                                           16777216            61656.99          57312.58          66630.31         300
+03:56:05 rc=0 async.pipe.65536.1.log                                     16777216            39352.43          39319.13          39397.98         300
+03:56:28 rc=0 async.pipe_async.65536.1.log                               16777216            71375.34          71265.17          71495.75         300
+03:56:45 rc=0 async.pipe.262144.1.log                                    16777216            52331.75          52179.62          52488.27         300
+03:57:07 rc=0 async.pipe_async.262144.1.log                              16777216            64761.89          64570.23          65001.37         300
+03:57:28 rc=0 async.pipe.1048576.1.log                                   16777216            63820.28          62538.31          65002.67         300
+03:58:04 rc=0 async.pipe_async.1048576.1.log                             16777216            92188.84          90410.78          95183.43         300
+== skipped Fig 9 with build: 2139 s left
+== 2026-11-20 03:58:04 Fig 9 at 40 ranks (CosmoFlow, DLRM) with build_gcc9 (2139 s left)
+04:01:15 rc=0 cosmoflow.baseline.40.log                                  
+04:06:16 rc=0 cosmoflow.hear-gcc9.40.log                                 
+04:07:28 rc=0 dlrm.baseline.40.log                                       
+04:09:27 rc=0 dlrm.hear-gcc9.40.log                                      
+== 2026-11-20 04:09:27 perf4 done

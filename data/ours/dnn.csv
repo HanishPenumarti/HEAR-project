@@ -1,0 +1,16 @@
+source,model,mode,nranks,time_per_iteration
+ours,cosmoflow,baseline,40,1.25601
+ours,cosmoflow,baseline,80,1.21074
+ours,cosmoflow,hear-gcc48,80,2.51416
+ours,cosmoflow,hear-gcc9,40,1.99218
+ours,cosmoflow,hear-gcc9,80,2.13517
+ours,dlrm,baseline,40,0.352065
+ours,dlrm,baseline,80,0.28113
+ours,dlrm,hear-gcc48,80,0.638244
+ours,dlrm,hear-gcc9,40,0.580512
+ours,dlrm,hear-gcc9,80,0.525276
+ours,resnet,baseline,40,10.91298
+ours,resnet,baseline,80,14.554926
+ours,resnet,hear-gcc48,80,26.884301
+ours,resnet,hear-gcc9,40,17.884541
+ours,resnet,hear-gcc9,80,20.55206

@@ -1,0 +1,30 @@
+== 2026-11-20 06:44:12 job 31091.master.local on compute01.local compute02.local compute03.local compute04.local
+== ResNet-152 proxy (5 warm-up + 10 timed iterations), 80 ranks
+06:48:07 rc=0 resnet.baseline.80.log                                     
+06:53:20 rc=0 resnet.hear-gcc9.80.log                                    
+07:00:01 rc=0 resnet.hear-gcc48.80.log                                   
+ResNet-152 with pure data parallelism runtime for each iteration = 14.554926 s. 
+ResNet-152 with pure data parallelism runtime for each iteration = 26.884301 s. 
+ResNet-152 with pure data parallelism runtime for each iteration = 20.552060 s. 
+== ResNet-152 proxy, 40 ranks
+07:02:56 rc=0 resnet.baseline.40.log                                     
+07:07:30 rc=0 resnet.hear-gcc9.40.log                                    
+== CosmoFlow and DLRM with the GCC 4.8.5 build, 80 ranks
+07:13:55 rc=0 cosmoflow.hear-gcc48.80.log                                
+07:16:07 rc=0 dlrm.hear-gcc48.80.log                                     
+CosmoFlow with a hybrid of model and data parallelism runtime for each iteration = 1.256010 s.
+CosmoFlow with a hybrid of model and data parallelism runtime for each iteration = 1.210740 s.
+CosmoFlow with a hybrid of model and data parallelism runtime for each iteration = 2.514160 s.
+CosmoFlow with a hybrid of model and data parallelism runtime for each iteration = 1.992180 s.
+CosmoFlow with a hybrid of model and data parallelism runtime for each iteration = 2.135170 s.
+MoEs: Rank = 0, world_size = 40, global batch = 2048, DLRM runtime per iteration = 0.352065 s
+MoEs: Rank = 0, world_size = 80, global batch = 2048, DLRM runtime per iteration = 0.281130 s
+MoEs: Rank = 0, world_size = 80, global batch = 2048, DLRM runtime per iteration = 0.638244 s
+MoEs: Rank = 0, world_size = 40, global batch = 2048, DLRM runtime per iteration = 0.580512 s
+MoEs: Rank = 0, world_size = 80, global batch = 2048, DLRM runtime per iteration = 0.525276 s
+ResNet-152 with pure data parallelism runtime for each iteration = 10.912980 s. 
+ResNet-152 with pure data parallelism runtime for each iteration = 14.554926 s. 
+ResNet-152 with pure data parallelism runtime for each iteration = 26.884301 s. 
+ResNet-152 with pure data parallelism runtime for each iteration = 17.884541 s. 
+ResNet-152 with pure data parallelism runtime for each iteration = 20.552060 s. 
+== 2026-11-20 07:16:07 perf_dnn2 done

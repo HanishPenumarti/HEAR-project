@@ -1,0 +1,8 @@
+Buffer size: 128 Bytes
+Dtype: int
+Op: sum
+Func: aesni
+Avg encryption time: 2.5607e-08 sec.
+Avg encryption throughput: 4.99863 Gbytes/sec.
+Avg decryption time: 1.5832e-08 sec.
+Avg decryption throughput: 8.08489 Gbytes/sec.

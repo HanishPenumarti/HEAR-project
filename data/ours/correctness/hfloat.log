@@ -1,0 +1,36 @@
+Error: 1.2781e-07
+Duration: 56480µs (56.48ms)
+
+Error: 1.31237e-07
+Duration: 56420µs (56.42ms)
+
+Error: 1.25653e-07
+Duration: 56417µs (56.417ms)
+
+Error: 1.30188e-07
+Duration: 56414µs (56.414ms)
+
+Error: 1.3013e-07
+Duration: 56419µs (56.419ms)
+
+Error: 1.31676e-07
+Duration: 56416µs (56.416ms)
+
+Error: 1.2858e-07
+Duration: 56417µs (56.417ms)
+
+Error: 1.29813e-07
+Duration: 56418µs (56.418ms)
+
+Error: 1.30118e-07
+Duration: 56419µs (56.419ms)
+
+Error: 1.31751e-07
+Duration: 56414µs (56.414ms)
+
+Total average error: 1.29696e-07
+
+real	0m0.733s
+user	0m0.634s
+sys	0m0.008s
+hfloat_correctness exit=0

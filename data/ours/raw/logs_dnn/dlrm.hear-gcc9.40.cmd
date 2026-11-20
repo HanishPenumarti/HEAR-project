@@ -1,0 +1,1 @@
+2026-11-20 04:07:28 mpirun -n 40 -ppn 20 -hosts compute01.local,compute02.local -genv LD_PRELOAD /home/<user>/BT2024190/hear_repro/build_gcc9/lib/libhear_release.so -genv HEAR_ENABLE_AESNI 1 -genv HEAR_PIPELINING_BLOCK_SIZE 262144 -genv HEAR_MPOOL_SBUF_LEN 8388608 /home/<user>/BT2024190/hear_repro/build/bin/dlrm

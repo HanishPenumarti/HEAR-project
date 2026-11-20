@@ -1,0 +1,11 @@
+# Private: never commit
+credentials.txt
+cluster.txt
+HEAR.pdf
+*.pdf
+known_hosts_cluster
+
+# Local scratch
+__pycache__/
+*.pyc
+*.tgz

@@ -1,0 +1,1 @@
+2026-11-19 23:56:08 mpirun -n 2 -ppn 1 -hosts compute01.local,compute02.local -genv LD_PRELOAD /home/<user>/BT2024190/hear_repro/build/lib/libhear_critical_path_baseline.so /home/<user>/BT2024190/hear_repro/build/bin/osu_allreduce_int -m 8:8 -f -i 100000

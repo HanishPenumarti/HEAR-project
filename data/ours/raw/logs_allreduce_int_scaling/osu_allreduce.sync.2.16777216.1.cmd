@@ -1,0 +1,1 @@
+2026-11-20 02:13:37 mpirun -n 2 -ppn 1 -hosts compute01.local,compute02.local -genv LD_PRELOAD /home/<user>/BT2024190/hear_repro/build/lib/libhear_release_mpool.so -genv HEAR_ENABLE_AESNI 1 -genv HEAR_MPOOL_SBUF_LEN 16777216 /home/<user>/BT2024190/hear_repro/build/bin/osu_allreduce_int -m 16777216:16777216 -f -i 300

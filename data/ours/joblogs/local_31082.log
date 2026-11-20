@@ -1,0 +1,23 @@
+== 2026-11-20 00:05:02 job 31082.master.local on compute03.local
+Model name:            Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz
+CPU max MHz:           3100.0000
+no_turbo=1
+== Fig 5: authors' single_core_encr_tput.py (21 buffer sizes x 5 PRF variants x int/float, 1000 iters)
+taskset: failed to execute python3: No such file or directory
+
+real	0m0.020s
+user	0m0.000s
+sys	0m0.002s
+2026-11-20 00:05:02 Fig 5 done: 0 logs
+== Fig 3 precision (MPFR 4.1.0) + correctness, in parallel
+2026-11-20 00:26:50 all done
+tail: option used in invalid context -- 3
+total 50300
+drwxr-xr-x 2 student3 student3      265 Nov 20 00:22 .
+drwxr-xr-x 3 student3 student3       29 Nov 20 00:08 ..
+-rw-r--r-- 1 student3 student3 12849893 Nov 20 00:15 11_float_addition_combined.csv
+-rw-r--r-- 1 student3 student3    48803 Nov 20 00:08 11_float_multiplication_new.csv
+-rw-r--r-- 1 student3 student3 12850028 Nov 20 00:22 24_float_addition_combined.csv
+-rw-r--r-- 1 student3 student3  6416167 Nov 20 00:09 24_float_multiplication_new.csv
+-rw-r--r-- 1 student3 student3 12890011 Nov 20  2026 53_float_addition_combined.csv
+-rw-r--r-- 1 student3 student3  6440011 Nov 20 00:09 53_float_multiplication_new.csv
